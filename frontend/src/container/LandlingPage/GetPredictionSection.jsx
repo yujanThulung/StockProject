@@ -1,6 +1,6 @@
 import React from "react";
-import getPredictionImage1 from "../assets/prediction1.jpg";
-import getPredictionImage2 from "../assets/prediction2.jpg";
+import getPredictionImage1 from "../../assets/prediction1.jpg";
+import getPredictionImage2 from "../../assets/prediction2.jpg";
 
 const GetPredictionSection = () => {
     return (
