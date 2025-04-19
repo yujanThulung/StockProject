@@ -1,0 +1,11 @@
+venv/
+venv310/
+node_modules/
+*.ipynb_checkpoints
+*.pyc
+__pycache__/
+*.save
+*.h5
+ml-model/main.py
+ml-model/main.ipynb
+.env.*
