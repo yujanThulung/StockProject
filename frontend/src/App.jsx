@@ -20,6 +20,8 @@ import FeaturesSection from "./container/LandlingPage/FeaturesSection.jsx";
 import Footer from "./container/LandlingPage/Footer.jsx";
 import GetPredictionSection from "./container/LandlingPage/GetPredictionSection.jsx";
 
+
+
 function App() {
     return (
         <Routes>
@@ -51,6 +53,7 @@ function App() {
                 
             </Route>
 
+            
             {/* Auth */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />

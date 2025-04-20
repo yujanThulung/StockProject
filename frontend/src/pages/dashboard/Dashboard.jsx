@@ -1,30 +1,29 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../../components/dashboard/NavBar.jsx";
 import Sidebar from "../../components/dashboard/Sidebar.jsx";
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const toggleSidebar = () =>{
+
+  const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
-  }
+  };
 
+  return (
+    <div className="flex h-screen bg-gray-50">
+      {/* Sidebar */}
+      <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
-    return (
-        <div className="flex h-screen bg-gray-50 overflow-hidden">
-            {/* Sidebar */}
-          <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-
-            {/* Main content here */}
-            <div className="flex-1 flex flex-col">
-                <Navbar />
-                <main className="flex justify-center items-center h-screen">
-                    <Outlet/>
-                </main>
-            </div>
-        </div>
-    );
+      {/* Main content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <Navbar />
+        <main className="flex-1 overflow-auto p-4"> {/* Adjusted margin-top to ensure content starts below navbar */}
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
 };
 
 export default Dashboard;

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import {
     LayoutDashboard,
+    LineChart,
     TrendingUp,
     HistoryIcon,
     List,
@@ -13,6 +14,7 @@ import logo from "../../assets/logo1.png";
 // Define items outside the component
 const sidebarNavItems = [
     { icon: <LayoutDashboard size={20} />, text: "Overview", path: "/dashboard/overview" },
+    { icon: <LineChart size={20} />, text: "Stock Prediction", path: "/dashboard/stock-prediction" },
     { icon: <TrendingUp size={20} />, text: "Analytics", path: "/dashboard/analytics" },
     { icon: <HistoryIcon size={20} />, text: "History", path: "/dashboard/history" },
     { icon: <List size={20} />, text: "Watch List", path: "/dashboard/watch-list" },
