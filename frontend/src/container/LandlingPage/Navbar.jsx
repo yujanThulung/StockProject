@@ -4,7 +4,7 @@ import logo from "../../assets/logo1.png";
 
 const navLinks = [
     { name: "Home", path: "/" },
-    { name: "Stock Prediction", path: "/dashboard/stock-prediction" },
+    { name: "Stock Prediction", path: "/dashboard/Overview" },
     { name: "Login", path: "/login" },
     { name: "Register", path: "/register" },
 ];

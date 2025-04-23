@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import r2_score
+from sklearn.metrics import mean_absolute_error
 import yfinance as yf
 from datetime import datetime, timedelta
 import joblib
@@ -10,8 +12,6 @@ from flask_cors import CORS
 import os
 
 app = Flask(__name__)
-
-# CORS(app, origins="http://localhost:5173") 
 CORS(app, origins=["http://localhost:5173", "http://localhost:8000"])
 
 # Global variables
@@ -35,6 +35,13 @@ def calculate_MACD(series):
     ema12 = series.ewm(span=12, adjust=False).mean()
     ema26 = series.ewm(span=26, adjust=False).mean()
     return ema12 - ema26
+
+def create_sequences(dataset, window_size):
+    X, y = [], []
+    for i in range(window_size, len(dataset)):
+        X.append(dataset[i-window_size:i])
+        y.append(dataset[i, 0])  # Predicting Close price (first column)
+    return np.array(X), np.array(y)
 
 # ----------------------------------------
 # Load Model & Scaler
@@ -62,28 +69,21 @@ def load_model():
 def prepare_data(ticker, start_date, end_date):
     df = yf.download(ticker, start=start_date, end=end_date)
 
-    # If columns are multi-level (e.g., ('Close', 'AAPL')), flatten them
     if isinstance(df.columns, pd.MultiIndex):
         df.columns = df.columns.get_level_values(0)
 
-    df = df.reset_index()  # Move 'Date' from index to a column
-
-    # Keep only needed columns
+    df = df.reset_index()
     df = df[['Date', 'Close', 'Volume']]
 
     df['SMA_50'] = df['Close'].rolling(window=50).mean()
     df['RSI'] = calculate_RSI(df['Close'], period=14)
     df['MACD'] = calculate_MACD(df['Close'])
-
     df.dropna(inplace=True)
     df.reset_index(drop=True, inplace=True)
-
     return df
 
-
-
 # ----------------------------------------
-# Predict route for handling requests
+# API Endpoints
 # ----------------------------------------
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -175,12 +175,6 @@ def predict():
                 'type': 'actual'
             })
 
-        if two_days_back_price is not None:
-            response_predictions.append({
-                'date': two_days_back.strftime('%Y-%m-%d'),
-                'price': two_days_back_price,
-                'type': 'actual'
-            })
 
         if today_price is not None:
             response_predictions.append({
@@ -188,6 +182,15 @@ def predict():
                 'price': today_price,
                 'type': 'actual'
             })
+
+        if two_days_back_price is not None:
+            response_predictions.append({
+                'date': two_days_back.strftime('%Y-%m-%d'),
+                'price': two_days_back_price,
+                'type': 'actual'
+            })
+
+        
 
         # Add predicted prices
         for d, p in zip(prediction_dates, predicted_prices):
@@ -206,52 +209,77 @@ def predict():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
 
-# ----------------------------------------
-# Historical Data Endpoint
-# ----------------------------------------
-@app.route('/historical', methods=['POST'])
-def historical():
+@app.route('/model_results', methods=['POST'])
+def model_results():
     try:
         data = request.get_json()
-        ticker = data.get('ticker', 'AAPL')
-        start_date = data.get('start_date', '2015-01-01')
-        end_date = data.get('end_date', datetime.now().strftime('%Y-%m-%d'))
+        ticker = data.get('ticker', 'META')
 
-        df = prepare_data(ticker, start_date, end_date)
+        if model is None or scaler is None:
+            return jsonify({'status': 'error', 'message': 'Model not loaded'})
 
-        # Ensure 'Date' is datetime
-        df['Date'] = pd.to_datetime(df['Date']) 
-        print(df.dtypes)
-        print(df.head())
+        today = pd.to_datetime('today').normalize()
+        df = prepare_data(ticker, '2015-01-01', today.strftime('%Y-%m-%d'))
+        data = df[features].values
+        scaled_data = scaler.transform(data)
 
+        X, y = create_sequences(scaled_data, window_size)
+        train_size = int(len(X) * 0.8)
+        X_train, y_train = X[:train_size], y[:train_size]
+        X_test, y_test = X[train_size:], y[train_size:]
 
-        # Build response
-        historical_data = []
-        for i in range(len(df)):
-            row = df.iloc[i]
-            print(type(row['Date']), row['Date'])
-            historical_data.append({
-                'date': row['Date'].strftime('%Y-%m-%d'),
-                'close': round(float(row['Close']), 2),
-                'volume': int(row['Volume']),
-                'sma_50': round(float(row['SMA_50']), 2),
-                'rsi': round(float(row['RSI']), 2),
-                'macd': round(float(row['MACD']), 2)
-            })
+        # Predict test set
+        pred_scaled = model.predict(X_test)
+
+        dummy = np.zeros((len(pred_scaled), len(features)))
+        dummy[:, 0] = pred_scaled[:, 0]
+        predicted = scaler.inverse_transform(dummy)[:, 0]
+
+        # Actual test values
+        dummy_true = np.zeros((len(y_test), len(features)))
+        dummy_true[:, 0] = y_test
+        actual = scaler.inverse_transform(dummy_true)[:, 0]
+
+        # Actual training values
+        dummy_train = np.zeros((len(y_train), len(features)))
+        dummy_train[:, 0] = y_train
+        train_actual = scaler.inverse_transform(dummy_train)[:, 0]
+
+        # Predict tomorrow
+        last_sequence = scaled_data[-window_size:]
+        last_sequence = np.expand_dims(last_sequence, axis=0)
+        pred_tomorrow_scaled = model.predict(last_sequence)
+        dummy_tomorrow = np.zeros((1, len(features)))
+        dummy_tomorrow[0, 0] = pred_tomorrow_scaled[0, 0]
+        predicted_tomorrow = scaler.inverse_transform(dummy_tomorrow)[0, 0]
+        tomorrow_date = (today + timedelta(days=1)).strftime('%Y-%m-%d')
+
+        r_squared = r2_score(actual, predicted)
+        dates_train = df['Date'].iloc[window_size:window_size + train_size].dt.strftime('%Y-%m-%d').tolist()
+        dates_test = df['Date'].iloc[window_size + train_size:].dt.strftime('%Y-%m-%d').tolist()
+
+        # Append tomorrow's prediction to predicted prices and date
+        predicted_prices = [float(price) for price in predicted] + [float(predicted_tomorrow)]
+        predicted_dates = dates_test + [tomorrow_date]
 
         return jsonify({
+            'status': 'success',
             'ticker': ticker,
-            'historical_data': historical_data,
-            'status': 'success'
+            'r_squared': r_squared,
+            'train_dates': dates_train,
+            'train_prices': [float(price) for price in train_actual],
+            'test_dates': dates_test,
+            'test_prices': [float(price) for price in actual],
+            'actual_prices': [float(price) for price in actual],  # actuals end today
+            'predicted_prices': predicted_prices,                 # includes tomorrow
+            'predicted_dates': predicted_dates,                   # includes tomorrow
+            'train_test_split_date': str(dates_train)
         })
 
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
 
 
-# ----------------------------------------
-# App Entry Point
-# ----------------------------------------
 if __name__ == '__main__':
     load_model()
     app.run(debug=True, port=5000)
