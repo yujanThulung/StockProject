@@ -1,43 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Chart from '../../components/dashboard/price_prediction/Chart.jsx';
-import SummaryCard from '../../components/dashboard/price_prediction/SummeryCard.jsx';
-import TickerSearch from '../../components/dashboard/price_prediction/TickerSearch.jsx';
+import React, { useEffect } from "react";
+import Chart from "../../components/dashboard/price_prediction/Chart.jsx";
+import SummaryCard from "../../components/dashboard/price_prediction/SummeryCard.jsx";
+import TickerSearch from "../../components/dashboard/price_prediction/TickerSearch.jsx";
+import usePricePredictionStore from "../../../store/usePricePrediction.store.js";
+import HistoricalDataCard from "../../components/dashboard/price_prediction/HistoricalDataCard.jsx";
 
 const PricePredictionPage = ({ initialTicker = "META" }) => {
-    const [ticker, setTicker] = useState(initialTicker);
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const { ticker, modelData, historicalData, loading, error, setTicker, fetchAllData } =
+        usePricePredictionStore();
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                setError(null);
-
-                const response = await axios.post("http://localhost:5000/model_results", {
-                    ticker: ticker,
-                });
-
-                if (response.data.status !== "success") {
-                    throw new Error(response.data.message || "Failed to fetch model results");
-                }
-
-                setData(response.data);
-                setLoading(false);
-            } catch (err) {
-                setError(err.message);
-                setLoading(false);
-                console.error("Error:", err);
-            }
-        };
-
-        fetchData();
-    }, [ticker]);
+        fetchAllData(initialTicker);
+    }, []);
 
     const handleTickerSearch = (newTicker) => {
         setTicker(newTicker);
+        fetchAllData(newTicker);
     };
 
     if (loading) {
@@ -60,14 +38,15 @@ const PricePredictionPage = ({ initialTicker = "META" }) => {
     return (
         <div className="flex flex-row flex-wrap lg:flex-row gap-4 p-4 min-h-[80vh]">
             <div className="w-full flex flex-row flex-wrap gap-4">
-                <div className="flex-2">
-                    <Chart data={data} ticker={ticker} />
+                <div className="flex flex-col gap-4 flex-1 ">
+                    {modelData && <Chart data={modelData} ticker={ticker} />}
+                    {historicalData && <HistoricalDataCard data={historicalData} ticker={ticker} />}
                 </div>
                 <div className="flex-1 flex flex-col gap-4">
-                <div className="w-full">
-                <TickerSearch onSearch={handleTickerSearch} currentTicker={ticker} />
-            </div>
-                    <SummaryCard data={data} ticker={ticker} />
+                    <div className="w-full">
+                        <TickerSearch onSearch={handleTickerSearch} currentTicker={ticker} />
+                    </div>
+                    {modelData && <SummaryCard data={modelData} ticker={ticker} />}
                 </div>
             </div>
         </div>

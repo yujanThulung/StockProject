@@ -217,9 +217,13 @@ def model_results():
 
         if model is None or scaler is None:
             return jsonify({'status': 'error', 'message': 'Model not loaded'})
+        
+        
 
         today = pd.to_datetime('today').normalize()
-        df = prepare_data(ticker, '2015-01-01', today.strftime('%Y-%m-%d'))
+        end_date = (today + timedelta(days=1)).strftime('%Y-%m-%d')
+        df = prepare_data(ticker, '2015-01-01', end_date)
+
         data = df[features].values
         scaled_data = scaler.transform(data)
 
@@ -274,6 +278,45 @@ def model_results():
             'predicted_prices': predicted_prices,                 # includes tomorrow
             'predicted_dates': predicted_dates,                   # includes tomorrow
             'train_test_split_date': str(dates_train)
+        })
+
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)})
+
+@app.route('/historical', methods=['POST'])
+def historical():
+    try:
+        data = request.get_json()
+        ticker = data.get('ticker', 'AAPL')
+        start_date = data.get('start_date', '2015-01-01')
+        end_date = data.get('end_date', datetime.now().strftime('%Y-%m-%d'))
+ 
+        df = prepare_data(ticker, start_date, end_date)
+ 
+        #Ensure 'Date' is datetime
+        df['Date'] = pd.to_datetime(df['Date']) 
+        print(df.dtypes)
+        print(df.head())
+ 
+ 
+        # Build response
+        historical_data = []
+        for i in range(len(df)):
+            row = df.iloc[i]
+            print(type(row['Date']), row['Date'])
+            historical_data.append({
+                'date': row['Date'].strftime('%Y-%m-%d'),
+                'close': round(float(row['Close']), 2),
+                'volume': int(row['Volume']),
+                'sma_50': round(float(row['SMA_50']), 2),
+                'rsi': round(float(row['RSI']), 2),
+                'macd': round(float(row['MACD']), 2)
+            })
+ 
+        return jsonify({
+            'ticker': ticker,
+            'historical_data': historical_data,
+            'status': 'success'
         })
 
     except Exception as e:

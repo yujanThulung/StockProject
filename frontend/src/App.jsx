@@ -6,7 +6,7 @@ import Dashboard from "./pages/dashboard/Dashboard.jsx";
 import Overview from "./pages/dashboard/Overview.jsx";
 import StockPrediction from "./pages/dashboard/PricePredictionChart.jsx";
 import Analytics from "./pages/dashboard/Analytics.jsx";
-import History from "./pages/dashboard/History.jsx";
+//import History from "./pages/dashboard/History.jsx";
 import WatchList from "./pages/dashboard/WatchList.jsx";
 import Notification from "./pages/dashboard/Notification.jsx";
 
