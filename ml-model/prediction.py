@@ -73,7 +73,7 @@ def prepare_data(ticker, start_date, end_date):
         df.columns = df.columns.get_level_values(0)
 
     df = df.reset_index()
-    df = df[['Date', 'Close', 'Volume']]
+    df = df[['Date','Open', 'High', 'Low', 'Close', 'Volume']]
 
     df['SMA_50'] = df['Close'].rolling(window=50).mean()
     df['RSI'] = calculate_RSI(df['Close'], period=14)
@@ -283,6 +283,87 @@ def model_results():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
 
+
+
+# # ----------------------------------------
+# # Model Results API
+# # ----------------------------------------
+# @app.route('/model_results', methods=['POST'])
+# def model_results():
+#     try:
+#         data = request.get_json()
+#         ticker = data.get('ticker', 'META')
+
+#         if model is None or scaler is None:
+#             return jsonify({'status': 'error', 'message': 'Model not loaded'})
+
+#         today = pd.to_datetime('today').normalize()
+#         end_date = (today + timedelta(days=1)).strftime('%Y-%m-%d')
+#         df = prepare_data(ticker, '2015-01-01', end_date)
+
+#         # 🔧 Ensure 'Date' is datetime for .dt operations
+#         df['Date'] = pd.to_datetime(df['Date'])
+
+#         data = df[features].values
+#         scaled_data = scaler.transform(data)
+
+#         X, y = create_sequences(scaled_data, window_size)
+#         train_size = int(len(X) * 0.8)
+#         X_train, y_train = X[:train_size], y[:train_size]
+#         X_test, y_test = X[train_size:], y[train_size:]
+
+#         # Predict test set
+#         pred_scaled = model.predict(X_test)
+
+#         dummy = np.zeros((len(pred_scaled), len(features)))
+#         dummy[:, 0] = pred_scaled[:, 0]
+#         predicted = scaler.inverse_transform(dummy)[:, 0]
+
+#         # Actual test values
+#         dummy_true = np.zeros((len(y_test), len(features)))
+#         dummy_true[:, 0] = y_test
+#         actual = scaler.inverse_transform(dummy_true)[:, 0]
+
+#         # Actual training values
+#         dummy_train = np.zeros((len(y_train), len(features)))
+#         dummy_train[:, 0] = y_train
+#         train_actual = scaler.inverse_transform(dummy_train)[:, 0]
+
+#         # Predict tomorrow
+#         last_sequence = scaled_data[-window_size:]
+#         last_sequence = np.expand_dims(last_sequence, axis=0)
+#         pred_tomorrow_scaled = model.predict(last_sequence)
+#         dummy_tomorrow = np.zeros((1, len(features)))
+#         dummy_tomorrow[0, 0] = pred_tomorrow_scaled[0, 0]
+#         predicted_tomorrow = scaler.inverse_transform(dummy_tomorrow)[0, 0]
+#         tomorrow_date = (today + timedelta(days=1)).strftime('%Y-%m-%d')
+
+#         r_squared = r2_score(actual, predicted)
+
+#         # ✅ Now safe to use .dt since 'Date' is datetime
+#         dates_train = df['Date'].iloc[window_size:window_size + train_size].dt.strftime('%Y-%m-%d').tolist()
+#         dates_test = df['Date'].iloc[window_size + train_size:].dt.strftime('%Y-%m-%d').tolist()
+
+#         predicted_prices = [float(price) for price in predicted] + [float(predicted_tomorrow)]
+#         predicted_dates = dates_test + [tomorrow_date]
+
+#         return jsonify({
+#             'status': 'success',
+#             'ticker': ticker,
+#             'r_squared': r_squared,
+#             'train_dates': dates_train,
+#             'train_prices': [float(price) for price in train_actual],
+#             'test_dates': dates_test,
+#             'test_prices': [float(price) for price in actual],
+#             'actual_prices': [float(price) for price in actual],
+#             'predicted_prices': predicted_prices,
+#             'predicted_dates': predicted_dates,
+#             'train_test_split_date': str(dates_train)
+#         })
+
+#     except Exception as e:
+#         return jsonify({'status': 'error', 'message': str(e)})
+
 @app.route('/historical', methods=['POST'])
 def historical():
     try:
@@ -306,6 +387,9 @@ def historical():
             print(type(row['Date']), row['Date'])
             historical_data.append({
                 'date': row['Date'].strftime('%Y-%m-%d'),
+                'open': round(float(row['Open']), 2),
+                'high': round(float(row['High']), 2),
+                'low': round(float(row['Low']), 2),
                 'close': round(float(row['Close']), 2),
                 'volume': int(row['Volume']),
                 'sma_50': round(float(row['SMA_50']), 2),
@@ -321,6 +405,7 @@ def historical():
 
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
+
 
 
 if __name__ == '__main__':

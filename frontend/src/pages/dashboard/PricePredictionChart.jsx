@@ -9,6 +9,8 @@ const PricePredictionPage = ({ initialTicker = "META" }) => {
     const { ticker, modelData, historicalData, loading, error, setTicker, fetchAllData } =
         usePricePredictionStore();
 
+        console.log("Response data:" , modelData);
+
     useEffect(() => {
         fetchAllData(initialTicker);
     }, []);

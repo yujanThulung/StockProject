@@ -1,67 +1,14 @@
-// src/components/dashboard/overview/TopLosers.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
-import { TrendingDown, AlertTriangle, Info } from "lucide-react";
+import { TrendingDown,Rocket,Info, TrendingDownIcon } from "lucide-react";
+import useStockStore from "../../../../store/useStockData.store.js";
 
 const TopLosers = () => {
-  const [losers, setLosers] = useState([
-    { 
-      symbol: "XYZ", 
-      name: "XYZ Industries", 
-      price: 45.32,
-      change: -5.1,
-      volume: "2.4M",
-      sector: "Industrial"
-    },
-    { 
-      symbol: "EVE", 
-      name: "Everest Energy", 
-      price: 12.56,
-      change: -4.6,
-      volume: "1.8M",
-      sector: "Energy"
-    },
-    { 
-      symbol: "DHL", 
-      name: "Downhill Ltd", 
-      price: 78.90,
-      change: -4.0,
-      volume: "3.2M",
-      sector: "Consumer"
-    },
-    { 
-      symbol: "CLM", 
-      name: "Classic Motors", 
-      price: 210.45,
-      change: -3.7,
-      volume: "5.6M",
-      sector: "Automotive"
-    },
-    { 
-      symbol: "LFI", 
-      name: "Lumbini Finance", 
-      price: 34.21,
-      change: -3.2,
-      volume: "1.2M",
-      sector: "Financial"
-    },
-  ]);
+  const { losers, fetchLosers, loading, error } = useStockStore();
 
-  // 🔁 Uncomment and replace URL when backend is ready
-  /*
   useEffect(() => {
-    const fetchLosers = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/top-losers");
-        const data = await res.json();
-        setLosers(data);
-      } catch (err) {
-        console.error("Error fetching top losers:", err);
-      }
-    };
     fetchLosers();
-  }, []);
-  */
+  }, [fetchLosers]);
 
   return (
     <motion.div 
@@ -75,46 +22,65 @@ const TopLosers = () => {
           <TrendingDown className="w-5 h-5" />
           Top Losers
         </h2>
-        
+        <div className="text-xs flex items-center gap-1 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded-full">
+          <TrendingDownIcon className="w-3 h-3" />
+          Momentum
+        </div>
       </div>
 
-      <div className="space-y-4">
-        {losers.map((stock, index) => (
-          <motion.div 
-            key={index}
-            whileHover={{ scale: 1.02 }}
-            className="flex justify-between items-center p-3 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors cursor-pointer"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                <span className="font-medium text-red-600 dark:text-red-400">
-                  {stock.symbol}
-                </span>
+      {loading ? (
+        <p className="text-center text-red-600 dark:text-red-400">Loading...</p>
+      ) : error ? (
+        <p className="text-center text-red-500">Error: {error}</p>
+      ) : (
+        <div className="space-y-4">
+          {losers.slice(0, 5).map((stock, index) => (
+            <motion.div 
+              key={index}
+              whileHover={{ scale: 1.02 }}
+              className="flex justify-between items-center p-3 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors cursor-pointer"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                  <span className="font-medium text-red-600 dark:text-red-400">
+                    {stock.symbol}
+                  </span>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 dark:text-white">{stock.name}</h3>
+                </div>
               </div>
-              <div>
-                <h3 className="font-medium text-gray-900 dark:text-white">{stock.name}</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{stock.sector}</p>
+              <div className="text-right">
+                <p className="font-semibold text-gray-900 dark:text-white">
+                  ${stock.price?.toFixed(2) || "0.00"}
+                </p>
+                <div className="flex items-center justify-end gap-2">
+                  <span className="text-red-600 dark:text-red-400 font-bold">
+                    {stock.change ? `${stock.change.toFixed(1)}%` : "0.0%"}
+                  </span>
+                </div>
               </div>
-            </div>
-            <div className="text-right">
-              <p className="font-semibold text-gray-900 dark:text-white">${stock.price.toFixed(2)}</p>
-              <div className="flex items-center justify-end gap-2">
-                <span className="text-red-600 dark:text-red-400 font-bold">
-                  {stock.change.toFixed(1)}%
-                </span>
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  Vol: {stock.volume}
-                </span>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
 
-      <div className="mt-4 flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
-        <Info className="w-3 h-3" />
-        <span>Updated at {new Date().toLocaleTimeString()}</span>
-      </div>
+      {losers.length > 0 && losers[0].dateFetched && (
+        <div className="mt-4 flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+          <Info className="w-3 h-3" />
+          <span>
+            Updated at{" "}
+            {new Date(losers[0].dateFetched).toLocaleTimeString(undefined, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
+            })}
+          </span>
+        </div>
+      )}
     </motion.div>
   );
 };

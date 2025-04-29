@@ -1,67 +1,14 @@
-// src/components/dashboard/overview/TopGainers.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { TrendingUp, Rocket, Info } from "lucide-react";
+import useStockStore from "../../../../store/useStockData.store.js";
 
 const TopGainers = () => {
-  const [gainers, setGainers] = useState([
-    { 
-      symbol: "TECH", 
-      name: "TechNova Inc.", 
-      price: 156.78,
-      change: +8.2,
-      volume: "4.7M",
-      sector: "Technology"
-    },
-    { 
-      symbol: "BIO", 
-      name: "BioHealth Labs", 
-      price: 89.45,
-      change: +6.9,
-      volume: "3.1M",
-      sector: "Healthcare"
-    },
-    { 
-      symbol: "GLE", 
-      name: "Green Energy Co.", 
-      price: 34.12,
-      change: +5.7,
-      volume: "8.2M",
-      sector: "Renewables"
-    },
-    { 
-      symbol: "FINX", 
-      name: "Fintech Express", 
-      price: 112.30,
-      change: +4.8,
-      volume: "2.9M",
-      sector: "Financial"
-    },
-    { 
-      symbol: "LUX", 
-      name: "Luxury Brands", 
-      price: 245.90,
-      change: +4.3,
-      volume: "1.5M",
-      sector: "Consumer"
-    },
-  ]);
+  const { gainers, fetchGainers, loading, error } = useStockStore();
 
-  // 🔁 Uncomment and replace URL when backend is ready
-  /*
   useEffect(() => {
-    const fetchGainers = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/top-gainers");
-        const data = await res.json();
-        setGainers(data);
-      } catch (err) {
-        console.error("Error fetching top gainers:", err);
-      }
-    };
     fetchGainers();
-  }, []);
-  */
+  }, [fetchGainers]);
 
   return (
     <motion.div 
@@ -81,43 +28,61 @@ const TopGainers = () => {
         </div>
       </div>
 
-      <div className="space-y-4">
-        {gainers.map((stock, index) => (
-          <motion.div 
-            key={index}
-            whileHover={{ scale: 1.02 }}
-            className="flex justify-between items-center p-3 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 rounded-lg transition-colors cursor-pointer"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-                <span className="font-medium text-emerald-600 dark:text-emerald-400">
-                  {stock.symbol}
-                </span>
+      {loading ? (
+        <p className="text-center text-emerald-600 dark:text-emerald-400">Loading...</p>
+      ) : error ? (
+        <p className="text-center text-red-500">Error: {error}</p>
+      ) : (
+        <div className="space-y-4">
+          {gainers.slice(0,5).map((stock, index) => (
+            <motion.div 
+              key={index}
+              whileHover={{ scale: 1.02 }}
+              className="flex justify-between items-center p-3 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 rounded-lg transition-colors cursor-pointer"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+                  <span className="font-medium text-emerald-600 dark:text-emerald-400">
+                    {stock.symbol}
+                  </span>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 dark:text-white">{stock.name}</h3>
+                  {/* <p className="text-xs text-gray-500 dark:text-gray-400">{stock.sector || "N/A"}</p> */}
+                </div>
               </div>
-              <div>
-                <h3 className="font-medium text-gray-900 dark:text-white">{stock.name}</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{stock.sector}</p>
+              <div className="text-right">
+                <p className="font-semibold text-gray-900 dark:text-white">
+                  ${stock.price?.toFixed(2) || "0.00"}
+                </p>
+                <div className="flex items-center justify-end gap-2">
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">
+                    {stock.change ? `+${stock.change.toFixed(1)}%` : "0.0%"}
+                  </span>
+                  {/* <span className="text-xs text-gray-500 dark:text-gray-400">
+                    Vol: {stock.volume || "N/A"}
+                  </span> */}
+                </div>
               </div>
-            </div>
-            <div className="text-right">
-              <p className="font-semibold text-gray-900 dark:text-white">${stock.price.toFixed(2)}</p>
-              <div className="flex items-center justify-end gap-2">
-                <span className="text-emerald-600 dark:text-emerald-400 font-bold">
-                  +{stock.change.toFixed(1)}%
-                </span>
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  Vol: {stock.volume}
-                </span>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
 
-      <div className="mt-4 flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
-        <Info className="w-3 h-3" />
-        <span>Updated at {new Date().toLocaleTimeString()}</span>
-      </div>
+      {gainers.length > 0 && (
+        <div className="mt-4 flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+          <Info className="w-3 h-3" />
+          <span>Updated at {new Date(gainers[0].dateFetched).toLocaleTimeString(undefined,{
+            year: "numeric",
+            month: "short",
+            day:"numeric",
+            hour:"2-digit",
+            minute:"2-digit",
+            second:"2-digit",
+            hour12:true,
+          })}</span>
+        </div>
+      )}
     </motion.div>
   );
 };

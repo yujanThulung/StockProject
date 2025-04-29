@@ -21,6 +21,8 @@ const usePricePredictionStore = create((set) => ({
         axios.post("http://localhost:5000/historical", { ticker })
       ]);
 
+      console.log("historical data: ", historicalRes.data);
+
       if (modelRes.data.status !== "success" || historicalRes.data.status !== "success") {
         throw new Error(modelRes.data.message || historicalRes.data.message || "Failed to fetch data");
       }
