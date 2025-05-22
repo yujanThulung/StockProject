@@ -8,6 +8,7 @@ __pycache__/
 *.h5
 ml-model/main.py
 ml-model/main.ipynb
+ml-model/.env
 
 
 # Environment files

@@ -10,8 +10,9 @@ export const fetchTopGainer = async () => {
         
 
     const res = await axios.get(`https://financialmodelingprep.com/api/v3/stock_market/gainers?apikey=${process.env.FMP_API_KEY}`);
+    console.log("I am in fetchAndStoreTopGainers.service.js");
 
-    const topGainers = res.data;
+    const topGainers = res.data.slice(0, 15);
 
     await TopGainer.deleteMany({})
 

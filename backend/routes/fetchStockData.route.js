@@ -1,10 +1,12 @@
 import { fetchLosers, fetchGainers } from '../controllers/fetchTopGainerLosers.controller.js';
 
-// your routes here
+
 import express from 'express';
 const router = express.Router();
 
-router.get('/losers', fetchLosers);
-router.get('/gainers', fetchGainers);
+
+router.get('/top-losers', fetchLosers);
+router.get('/top-gainers', fetchGainers);
+
 
 export default router;

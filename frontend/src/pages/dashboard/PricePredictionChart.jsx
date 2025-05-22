@@ -36,15 +36,17 @@ const PricePredictionPage = ({ initialTicker = "META" }) => {
             </div>
         );
     }
-
     return (
         <div className="flex flex-row flex-wrap lg:flex-row gap-4 p-4 min-h-[80vh]">
             <div className="w-full flex flex-row flex-wrap gap-4">
-                <div className="flex flex-col gap-4 flex-1 ">
+                {/* Left section (70%) */}
+                <div className="flex flex-col gap-4 w-full lg:w-[70%]">
                     {modelData && <Chart data={modelData} ticker={ticker} />}
                     {historicalData && <HistoricalDataCard data={historicalData} ticker={ticker} />}
                 </div>
-                <div className="flex-1 flex flex-col gap-4">
+                
+                {/* Right section (30%) */}
+                <div className="flex flex-col gap-4 w-full lg:w-[28%]">
                     <div className="w-full">
                         <TickerSearch onSearch={handleTickerSearch} currentTicker={ticker} />
                     </div>

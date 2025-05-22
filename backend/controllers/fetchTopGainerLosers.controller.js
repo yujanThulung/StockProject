@@ -1,32 +1,31 @@
-import fetch from 'node-fetch'; 
-import axios from 'axios';
-import dotenv from 'dotenv';
 
-dotenv.config();
 
-const API_KEY = process.env.FMP_API_KEY;
-console.log('FMP API KEY:', API_KEY);
+console.log("I am in fetchTopGainerLosers.controller.js");
+
+import TopGainer from "../models/TopGainer.model.js";
+import TopLoser from "../models/TopLoser.model.js";
+
 
 const fetchLosers = async (req, res) => {
+  console.log("Fetching top losers from DB...");
   try {
-    const response = await fetch(`https://financialmodelingprep.com/api/v3/stock_market/losers?apikey=${API_KEY}`);
-    const data = await response.json();
-    console.log("Top Losers Data:", data);  
+    const data = await TopLoser.find({}).sort({ changesPercentage: 1 });
+    console.log("📉 Top Losers Fetched:", data.length);
     res.json(data);
   } catch (error) {
-    console.error('Error fetching top losers:', error);
+    console.error('❌ Error fetching top losers from DB:', error.message);
     res.status(500).json({ error: 'Failed to fetch top losers' });
   }
 };
 
 const fetchGainers = async (req, res) => {
+  console.log("API: Fetching top gainers from DB...");
   try {
-    const response = await fetch(`https://financialmodelingprep.com/api/v3/stock_market/gainers?apikey=${API_KEY}`);
-    const data = await response.json();
-    console.log("Top Gainers Data:", data);
+    const data = await TopGainer.find({}).sort({ changesPercentage: -1 });
+    console.log("API:📈 Top Gainers Fetched:", data.length);
     res.json(data);
   } catch (error) {
-    console.error('Error fetching top gainers:', error);
+    console.error('❌ Error fetching top gainers from DB:', error.message);
     res.status(500).json({ error: 'Failed to fetch top gainers' });
   }
 };

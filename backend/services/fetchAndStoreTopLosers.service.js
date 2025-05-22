@@ -11,8 +11,10 @@ import TopLoser from "../models/TopLoser.model.js";
 const fetchAndStoreTopLosers = async () => {
   try {
     const res = await axios.get(`https://financialmodelingprep.com/api/v3/stock_market/losers?apikey=${process.env.FMP_API_KEY}`);
+    
+    console.log("I am in fetchAndStoreTopLosers.service.js");
 
-    const data = res.data;
+    const data = res.data.slice(0, 15);
 
     await TopLoser.deleteMany({});
     await TopLoser.insertMany(
