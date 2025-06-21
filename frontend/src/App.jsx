@@ -1,6 +1,7 @@
 // App.jsx
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useEffect } from "react";
 
 import Dashboard from "./pages/dashboard/Dashboard.jsx";
 import Overview from "./pages/dashboard/Overview.jsx";
@@ -19,10 +20,20 @@ import HowItWorks from "./container/LandlingPage/HowItWorks.jsx";
 import FeaturesSection from "./container/LandlingPage/FeaturesSection.jsx";
 import Footer from "./container/LandlingPage/Footer.jsx";
 import GetPredictionSection from "./container/LandlingPage/GetPredictionSection.jsx";
+import ProtectedRoute from "./routes/ProtectedRoute.jsx";
+
+
+import useWatchlistStore from "../store/watchlistStore.js";
 
 
 
 function App() {
+
+
+    useEffect(() => {
+    useWatchlistStore.getState().initSocket(); // this for socket 
+  }, []);
+
     return (
         <Routes>
             {/* Landing Page */}
@@ -42,7 +53,11 @@ function App() {
             />
 
             {/* Dashboard */}
-            <Route path="/dashboard" element={<Dashboard />}>
+            <Route path="/dashboard" element={
+                <ProtectedRoute>
+                    <Dashboard />
+                </ProtectedRoute>
+            }>
                 <Route index element={<Overview />} />
                 <Route path="overview" element={<Overview />} />
                 <Route path="stock-prediction" element={<StockPrediction />} />
@@ -56,10 +71,10 @@ function App() {
             
             {/* Auth */}
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/signup" element={<RegisterPage />} />
 
             
-        </Routes>
+        </Routes>                                                                                                                  
     );
 }
 

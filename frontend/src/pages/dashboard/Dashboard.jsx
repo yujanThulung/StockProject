@@ -18,7 +18,7 @@ const Dashboard = () => {
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <Navbar />
-        <main className="flex-1 overflow-auto p-4"> {/* Adjusted margin-top to ensure content starts below navbar */}
+        <main className="flex-1 overflow-auto p-4"> 
           <Outlet />
         </main>
       </div>

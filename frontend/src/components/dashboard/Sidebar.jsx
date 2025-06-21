@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
     LayoutDashboard,
     LineChart,
@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import logo from "../../assets/logo1.png";
 
+import { useAuthStore } from "../../../store/authentication.store";
+
 // Define items outside the component
 const sidebarNavItems = [
     { icon: <LayoutDashboard size={20} />, text: "Overview", path: "/dashboard/overview" },
@@ -22,6 +24,19 @@ const sidebarNavItems = [
 ];
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
+
+    const navigate = useNavigate();
+    const logout = useAuthStore((state)=> state.logout);
+
+
+    const handleLogout = async()=>{
+        try {
+            await logout();
+            navigate("/login");
+        } catch (error) {
+            console.error("Logout error:", error);
+        }
+    }
     return (
         <div
             className={`bg-white  shadow-lg transition-all duration-300 ease-in-out ${
@@ -78,9 +93,9 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
 
             {/* Logout section */}
             <div className="mt-auto border-t border-gray-200 p-4">
-                <Link
-                    to="/login" // Or handle logout functionality here
-                    className={`flex items-center text-gray-700 hover:text-gray-800 ${
+                <button
+                    onClick={handleLogout}
+                    className={`flex items-center w-full text-gray-700 hover:text-gray-800 ${
                         isSidebarOpen ? "" : "justify-center"
                     }`}
                     title={!isSidebarOpen ? "Logout" : ""}
@@ -95,7 +110,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                     >
                         Logout
                     </span>
-                </Link>
+                </button>
             </div>
         </div>
     );

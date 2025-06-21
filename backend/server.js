@@ -83,6 +83,7 @@
 
 
 
+
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -94,6 +95,8 @@ import overview from './routes/overview.route.js';
 import connectDB from './config/db.js';
 import { startScheduledJobs } from './jobs/dailyUpdate.js';
 import authRoutes from './routes/auth.route.js';
+import watchlistRoutes from './routes/watchlist.route.js';
+import authenticate from './middleware/authenticate.middleware.js';
 
 dotenv.config();
 const app = express();
@@ -103,7 +106,12 @@ const PORT = process.env.PORT || 8000;
 console.log("🔧 Initializing server setup...");
 
 // Middleware setup
-app.use(cors());
+
+app.use(cors({
+   origin: 'http://localhost:5173',
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -117,6 +125,7 @@ app.get('/', (req, res) => {
 app.use("/api", authRoutes);
 app.use("/api", stockRoutes);
 app.use('/api', overview);
+app.use('/api/watchlist', authenticate, watchlistRoutes);
 
 const start = async () => {
   try {
