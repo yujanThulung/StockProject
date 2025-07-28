@@ -1,0 +1,59 @@
+@startuml
+class User {
+  name: String
+  email: String
+  password: String
+  role: String
+  _id: ObjectId
+  createdAt: Date
+  updatedAt: Date
+}
+
+class OverviewModel {
+  symbol: String
+  data: Mixed
+  lastUpdated: Date
+  _id: ObjectId
+}
+
+class TopGainerModel {
+  symbol: String
+  name: String
+  price: Number
+  change: Number
+  changesPercentage: Number
+  dateFetched: Date
+  _id: ObjectId
+}
+
+class TopLoserModel {
+  symbol: String
+  name: String
+  price: Number
+  change: Number
+  changesPercentage: Number
+  dateFetched: Date
+  _id: ObjectId
+}
+
+class WatchlistItem {
+  userId: ObjectId
+  symbol: String
+  _id: ObjectId
+  createdAt: Date
+  updatedAt: Date
+}
+
+class Notification {
+  userId: ObjectId
+  symbol: String
+  targetPrice: Number
+  condition: String
+  triggered: Boolean
+  message: String
+  _id: ObjectId
+  createdAt: Date
+  updatedAt: Date
+}
+
+@enduml

@@ -1,8 +1,11 @@
 import React from 'react'
+// import AlertComponent from "../../components/Alert";
+import NotificationComponent from "../../components/nontriggerdNotification";
 
 const Notification = () => {
   return (
-    <div>This is  Notification</div>
+    // <AlertComponent />
+    <NotificationComponent />
   )
 }
 

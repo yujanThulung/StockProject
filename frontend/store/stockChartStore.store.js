@@ -15,7 +15,7 @@ const useStockChartStore = create((set) => ({
     { label: '1Y', months: 12 },
     { label: '5Y', months: 60 }
   ],
-  selectedRange: { label: '1Y', months: 12 },
+  selectedRange: { label: '1M', months: 3 },
   chartData: [],
   loading: false,
   error: null,

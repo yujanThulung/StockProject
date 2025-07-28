@@ -1,8 +1,9 @@
 import React from 'react'
+import WatchListComponent from "../../components/dashboard/overview/Watchlist.jsx";
 
 const WatchList = () => {
   return (
-    <div>WatchList</div>
+    <WatchListComponent />
   )
 }
 

@@ -4,7 +4,7 @@ import Navbar from "../../components/dashboard/NavBar.jsx";
 import Sidebar from "../../components/dashboard/Sidebar.jsx";
 
 const Dashboard = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);

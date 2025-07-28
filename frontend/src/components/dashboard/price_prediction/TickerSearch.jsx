@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 const trendingTickers = [
-  { symbol: 'META', name: 'Meta Platforms' },
+  { symbol: 'PEP', name: 'PepsiCo, Inc.' },
   { symbol: 'GOOGL', name: 'Alphabet Inc.' },
-  { symbol: 'AAPL', name: 'Apple Inc.' },
+  { symbol: 'BABA', name: 'Alibaba Group Holding Ltd' },
   { symbol: 'AMZN', name: 'Amazon.com Inc.' },
-  { symbol: 'MSFT', name: 'Microsoft Corporation' },
+  { symbol: 'DIS', name: 'The Walt Disney Company' },
   { symbol: 'TSLA', name: 'Tesla Inc.' },
   { symbol: 'NVDA', name: 'NVIDIA Corporation' },
   { symbol: 'NFLX', name: 'Netflix Inc.' },

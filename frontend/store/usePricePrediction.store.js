@@ -1,122 +1,53 @@
-
-// import { create } from 'zustand';
-// import axios from 'axios';
-
-// const usePricePredictionStore = create((set) => ({
-//   ticker: 'GOOG',
-//   modelData: null,
-//   historicalData: [],     
-//   loading: false,
-//   error: null,
-
-//   // set the ticker
-//   setTicker: (newTicker) => set({ ticker: newTicker }),
-
-//   // fetch both model + historical
-//   fetchAllData: async (ticker) => {
-//     try {
-//       set({ loading: true, error: null });
-
-//       const [modelRes, historicalRes] = await Promise.all([
-//         axios.post("http://localhost:5000/predict", { ticker }),
-//         axios.post("http://localhost:5000/historical", { ticker }),
-//         fetch
-//       ]);
-
-//       if (modelRes.data.status !== "success" || historicalRes.data.status !== "success") {
-//         throw new Error(modelRes.data.message || historicalRes.data.message || "Failed to fetch data");
-//       }
-
-//       set({
-//         modelData:       modelRes.data,
-//         historicalData:  historicalRes.data.historical,  // just the array
-//         loading:         false,
-//         error:           null
-//       });
-//     } catch (err) {
-//       set({
-//         error:           err.message,
-//         loading:         false,
-//         modelData:       null,
-//         historicalData:  []
-//       });
-//       console.error("Error fetching data:", err);
-//     }
-//   },
-
-  
-  
-//   // ✅ NEW: fetch only historical data
-//   fetchHistoricalData: async (ticker) => {
-//     try {
-//       const response = await axios.post("http://localhost:5000/historical", { ticker });
-
-//       if (response.data.status !== "success") {
-//         throw new Error(response.data.message || "Failed to fetch historical data");
-//       }
-
-//       set({
-//         historicalData: response.data.historical,
-//         error: null,
-//       });
-//     } catch (err) {
-//       set({
-//         error: err.message,
-//         historicalData: [],
-//       });
-//       console.error("Error fetching historical data:", err);
-//     }
-//   },
-  
-
-//   // append a single new bar if its timestamp is different
-//   addBarToHistorical: (bar) =>
-//   set((state) => {
-//     const last = state.historicalData.at(-1);
-//     const lastTime = last ? new Date(last.Date).toISOString() : null;
-//     const barTime = new Date(bar.Date).toISOString();
-
-//     if (lastTime !== barTime || (last && last.Close !== bar.Close)) {
-//       return {
-//         historicalData: [...state.historicalData, bar],
-//       };
-//     }
-
-//     return {}; // No update
-//   }),
-
-
-
-
-//   reset: () => set({
-//     ticker:          'AAPL',
-//     modelData:       null,
-//     historicalData:  [],
-//     loading:         false,
-//     error:           null
-//   })
-// }));
-
-// export default usePricePredictionStore;
-
-
-
-
 import { create } from 'zustand';
 import axios from 'axios';
 
-const usePricePredictionStore = create((set) => ({
-  ticker: 'meta',
+const usePricePredictionStore = create((set, get) => ({
+  ticker: 'PEP',
   modelData: null,
   historicalData: [],
-  stockData: null, 
+  stockData: null,
   loading: false,
   error: null,
 
-  // set the ticker
+  // Set new ticker
   setTicker: (newTicker) => set({ ticker: newTicker }),
 
-  // fetch model, historical, and overview data
+  // ✅ Fetch model data only
+  fetchModelData: async (ticker) => {
+    try {
+      const response = await axios.post("http://localhost:5000/predict", { ticker });
+      if (response.data.status !== "success") throw new Error(response.data.message || "Model fetch failed");
+      set({ modelData: response.data, error: null });
+    } catch (err) {
+      console.error("Error fetching model data:", err);
+      set({ error: err.message, modelData: null });
+    }
+  },
+
+  // ✅ Fetch historical data only
+  fetchHistoricalData: async (ticker) => {
+    try {
+      const response = await axios.post("http://localhost:5000/historical", { ticker });
+      if (response.data.status !== "success") throw new Error(response.data.message || "Historical fetch failed");
+      set({ historicalData: response.data.historical, error: null });
+    } catch (err) {
+      console.error("Error fetching historical data:", err);
+      set({ error: err.message, historicalData: [] });
+    }
+  },
+
+  // ✅ Fetch overview data only
+  fetchOverviewData: async (ticker) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/overview/${ticker}`);
+      set({ stockData: response.data, error: null });
+    } catch (err) {
+      console.error("Error fetching overview data:", err);
+      set({ error: err.message, stockData: null });
+    }
+  },
+
+  // ✅ Combined fetch
   fetchAllData: async (ticker) => {
     try {
       set({ loading: true, error: null });
@@ -124,7 +55,7 @@ const usePricePredictionStore = create((set) => ({
       const [modelRes, historicalRes, overviewRes] = await Promise.all([
         axios.post("http://localhost:5000/predict", { ticker }),
         axios.post("http://localhost:5000/historical", { ticker }),
-        axios.get(`http://localhost:8000/api/overview/${ticker}`), 
+        axios.get(`http://localhost:8000/api/overview/${ticker}`),
       ]);
 
       if (
@@ -134,7 +65,7 @@ const usePricePredictionStore = create((set) => ({
         throw new Error(
           modelRes.data.message ||
           historicalRes.data.message ||
-          "Failed to fetch model/historical data"
+          "Failed to fetch model or historical data"
         );
       }
 
@@ -147,40 +78,18 @@ const usePricePredictionStore = create((set) => ({
       });
 
     } catch (err) {
-      console.error("Error fetching data:", err);
+      console.error("Error in fetchAllData:", err);
       set({
-        error: err.message,
         loading: false,
+        error: err.message,
         modelData: null,
         historicalData: [],
-        stockData: null, 
+        stockData: null,
       });
     }
   },
 
-  
-  fetchHistoricalData: async (ticker) => {
-    try {
-      const response = await axios.post("http://localhost:5000/historical", { ticker });
-
-      if (response.data.status !== "success") {
-        throw new Error(response.data.message || "Failed to fetch historical data");
-      }
-
-      set({
-        historicalData: response.data.historical,
-        error: null,
-      });
-    } catch (err) {
-      console.error("Error fetching historical data:", err);
-      set({
-        error: err.message,
-        historicalData: [],
-      });
-    }
-  },
-
-  // append a single new bar if its timestamp is different
+  // ✅ Append new bar
   addBarToHistorical: (bar) =>
     set((state) => {
       const last = state.historicalData.at(-1);
@@ -196,12 +105,12 @@ const usePricePredictionStore = create((set) => ({
       return {};
     }),
 
-  
+  // ✅ Reset store
   reset: () => set({
-    ticker: 'AAPL',
+    ticker: 'PEP',
     modelData: null,
     historicalData: [],
-    overviewData: null, 
+    stockData: null,
     loading: false,
     error: null,
   }),

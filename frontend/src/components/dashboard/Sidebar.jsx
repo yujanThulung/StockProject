@@ -3,7 +3,7 @@ import {
     LayoutDashboard,
     LineChart,
     TrendingUp,
-    HistoryIcon,
+    Banknote,
     List,
     Bell,
     Menu,
@@ -18,7 +18,7 @@ const sidebarNavItems = [
     { icon: <LayoutDashboard size={20} />, text: "Overview", path: "/dashboard/overview" },
     { icon: <LineChart size={20} />, text: "Stock Prediction", path: "/dashboard/stock-prediction" },
     { icon: <TrendingUp size={20} />, text: "Analytics", path: "/dashboard/analytics" },
-    { icon: <HistoryIcon size={20} />, text: "History", path: "/dashboard/history" },
+    { icon: <Banknote  size={20} />, text: "Financial", path: "/dashboard/financial" },
     { icon: <List size={20} />, text: "Watch List", path: "/dashboard/watch-list" },
     { icon: <Bell size={20} />, text: "Notifications", path: "/dashboard/notifications" },
 ];
@@ -29,14 +29,14 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     const logout = useAuthStore((state)=> state.logout);
 
 
-    const handleLogout = async()=>{
-        try {
-            await logout();
-            navigate("/login");
-        } catch (error) {
-            console.error("Logout error:", error);
-        }
-    }
+    // const handleLogout = async()=>{
+    //     try {
+    //         await logout();
+    //         navigate("/login");
+    //     } catch (error) {
+    //         console.error("Logout error:", error);
+    //     }
+    // }
     return (
         <div
             className={`bg-white  shadow-lg transition-all duration-300 ease-in-out ${
@@ -92,7 +92,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
             </nav>
 
             {/* Logout section */}
-            <div className="mt-auto border-t border-gray-200 p-4">
+            {/* <div className="mt-auto border-t border-gray-200 p-4">
                 <button
                     onClick={handleLogout}
                     className={`flex items-center w-full text-gray-700 hover:text-gray-800 ${
@@ -111,7 +111,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                         Logout
                     </span>
                 </button>
-            </div>
+            </div> */}
         </div>
     );
 };

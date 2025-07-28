@@ -1,6 +1,8 @@
 import { User } from '../models/index.model.js';
 import { generateTokenAndCookie } from '../utils/generateTokenAndCookie.js';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+
 
 
 //signup
@@ -61,9 +63,17 @@ export const signup = async (req, res) => {
         }
 
         generateTokenAndCookie(res,user.id);
+
+        const token = jwt.sign({id:user._id},
+          process.env.JWT_SECRET,
+          {
+              expiresIn: '1d',
+          }
+        )
         res.status(200).json({
             success:true,
             message: 'Login successful',
+            token,
             data:{
                 id:user._id,
                 name:user.name,
@@ -98,7 +108,6 @@ export const signup = async (req, res) => {
   }
 
 
-  //update user
   // update user
 export const updateUser = async (req, res) => {
   const { name, email, password, newPassword } = req.body;
@@ -209,3 +218,29 @@ export const updateUser = async (req, res) => {
       res.status(500).json({ message: 'Server error during user deletion' });
     }
   }
+
+
+
+  export const checkAuth = async (req, res) => {
+  try {
+    const { userId } = req.user;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+
+    res.status(200).json({
+      success: true,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error("Check auth error:", error);
+    res.status(500).json({ message: "Server error during auth check" });
+  }
+};

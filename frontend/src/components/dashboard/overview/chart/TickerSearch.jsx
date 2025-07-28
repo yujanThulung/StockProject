@@ -6,15 +6,6 @@ const TickerSearch = () => {
     const [inputValue, setInputValue] = useState("");
     const { ticker, setTicker, fetchAllData, loading } = usePricePredictionStore();
 
-    // const handleSearch = (e) => {
-    //     e.preventDefault();
-    //     const cleanedTicker = inputValue.trim().toUpperCase();
-    //     if (cleanedTicker && cleanedTicker !== ticker) {
-    //         setTicker(cleanedTicker);
-    //         fetchAllData(cleanedTicker);
-    //     }
-    // };
-
     const handleSearch = (e) => {
     e.preventDefault();
     const cleanedTicker = inputValue.trim().toUpperCase();

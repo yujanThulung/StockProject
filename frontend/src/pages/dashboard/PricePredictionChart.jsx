@@ -3,21 +3,20 @@ import Chart from "../../components/dashboard/price_prediction/Chart.jsx";
 import SummaryCard from "../../components/dashboard/price_prediction/SummeryCard.jsx";
 import TickerSearch from "../../components/dashboard/price_prediction/TickerSearch.jsx";
 import usePricePredictionStore from "../../../store/usePricePrediction.store.js";
-import HistoricalDataCard from "../../components/dashboard/price_prediction/HistoricalDataCard.jsx";
 
-const PricePredictionPage = ({ initialTicker = "META" }) => {
-    const { ticker, modelData, historicalData, loading, error, setTicker, fetchAllData } =
+const PricePredictionPage = ({ initialTicker = "PEP" }) => {
+    const { ticker, modelData, historicalData, loading, error, setTicker, fetchModelData } =
         usePricePredictionStore();
 
         console.log("Response data:" , modelData);
 
     useEffect(() => {
-        fetchAllData(initialTicker);
+        fetchModelData(initialTicker);
     }, []);
 
     const handleTickerSearch = (newTicker) => {
         setTicker(newTicker);
-        fetchAllData(newTicker);
+        fetchModelData(newTicker);
     };
 
     if (loading) {
@@ -42,7 +41,6 @@ const PricePredictionPage = ({ initialTicker = "META" }) => {
                 {/* Left section (70%) */}
                 <div className="flex flex-col gap-4 w-full lg:w-[70%]">
                     {modelData && <Chart data={modelData} ticker={ticker} />}
-                    {historicalData && <HistoricalDataCard data={historicalData} ticker={ticker} />}
                 </div>
                 
                 {/* Right section (30%) */}
