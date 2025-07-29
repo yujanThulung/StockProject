@@ -15,7 +15,7 @@ const usePricePredictionStore = create((set, get) => ({
   // ✅ Fetch model data only
   fetchModelData: async (ticker) => {
     try {
-      const response = await axios.post("http://localhost:5000/predict", { ticker });
+      const response = await axios.post("http://localhost:8080/predict", { ticker });
       if (response.data.status !== "success") throw new Error(response.data.message || "Model fetch failed");
       set({ modelData: response.data, error: null });
     } catch (err) {
@@ -27,7 +27,8 @@ const usePricePredictionStore = create((set, get) => ({
   // ✅ Fetch historical data only
   fetchHistoricalData: async (ticker) => {
     try {
-      const response = await axios.post("http://localhost:5000/historical", { ticker });
+      console.log("Fetching historical data for ticker:", ticker);
+      const response = await axios.post("http://localhost:8080/historical", { ticker });
       if (response.data.status !== "success") throw new Error(response.data.message || "Historical fetch failed");
       set({ historicalData: response.data.historical, error: null });
     } catch (err) {
@@ -53,8 +54,8 @@ const usePricePredictionStore = create((set, get) => ({
       set({ loading: true, error: null });
 
       const [modelRes, historicalRes, overviewRes] = await Promise.all([
-        axios.post("http://localhost:5000/predict", { ticker }),
-        axios.post("http://localhost:5000/historical", { ticker }),
+        axios.post("http://localhost:8080/predict", { ticker }),
+        axios.post("http://localhost:8080/historical", { ticker }),
         axios.get(`http://localhost:8000/api/overview/${ticker}`),
       ]);
 

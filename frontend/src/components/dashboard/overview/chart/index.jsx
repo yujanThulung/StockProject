@@ -1,4 +1,4 @@
-import React, { useEffect,useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import usePricePredictionStore from "../../../../../store/usePricePrediction.store.js";
 import useStockChartStore from "../../../../../store/stockChartStore.store";
 
@@ -15,11 +15,10 @@ const StockChart = () => {
     const fetchHistoricalData = usePricePredictionStore((state) => state.fetchHistoricalData);
 
     useEffect(() => {
-        if (ticker) {
+        if (ticker && (!historicalData || historicalData.length === 0)) {
             fetchHistoricalData(ticker);
         }
-    }),
-        [ticker, fetchHistoricalData];
+    }, [ticker, fetchHistoricalData, historicalData]);
 
     // Transform historical data for chart display
     const transformedData = useMemo(() => {
