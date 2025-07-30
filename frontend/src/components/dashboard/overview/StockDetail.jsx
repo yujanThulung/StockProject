@@ -19,13 +19,7 @@ const dummyHistorical = {
 
 
 const StockDetail = () => {
-    // const { ticker, historicalData, loading, error, fetchAllData } = useStockStore();
-
-    // useEffect(() => {
-    //     fetchAllData(ticker);
-    // }, [ticker, fetchAllData]);
-
-    // Here we use dummy data instead of actual fetched data
+    
     const historicalData = dummyHistorical;
     const ticker = dummyHistorical.ticker;
     const loading = false;

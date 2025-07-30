@@ -6,10 +6,10 @@ export const CustomTooltip = ({ active, payload }) => {
 
     // Format the date: "Mon, Feb 26 2001"
     const formattedDate = new Date(data.time).toLocaleDateString("en-US", {
-      weekday: "short", // Mon
-      year: "numeric",  // 2001
-      month: "short",   // Feb
-      day: "2-digit"    // 26
+      weekday: "short", 
+      year: "numeric",  
+      month: "short",  
+      day: "2-digit"    
     });
 
     return (

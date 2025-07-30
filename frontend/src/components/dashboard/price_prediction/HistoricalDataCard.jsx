@@ -12,11 +12,11 @@ const HistoricalDataCard = () => {
     error,
   } = usePricePredictionStore();
 
-  useEffect(() => {
-    if (ticker) {
-      fetchHistoricalData(ticker);
-    }
-  }, [ticker, fetchHistoricalData]);
+  // useEffect(() => {
+  //   if (ticker) {
+  //     fetchHistoricalData(ticker);
+  //   }
+  // }, [ticker, fetchHistoricalData]);
 
   const sortedData = useMemo(() => {
     return [...historicalData].sort((a, b) => new Date(b.Date) - new Date(a.Date));

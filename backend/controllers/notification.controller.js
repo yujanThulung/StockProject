@@ -1,39 +1,4 @@
-
-// this is new code 
-
 import { Notification } from '../models/index.model.js';
-
-// Create new notification
-// export const createNotification = async (req, res) => {
-//   try {
-//     const userId = req.user.userId;
-//     const { symbol, targetPrice, message } = req.body;
-
-//     const existitingNotification = await Notification.findOne({ userId, symbol, targetPrice });
-//     if (existitingNotification) {
-//       console.log(`Notification already exists for ${symbol} at $${targetPrice.toFixed(2)}`);
-//       return res.status(400).json({ error: 'Notification already exists for this symbol and target price' });
-//     }
-
-//     const notification = new Notification({
-//       userId,
-//       symbol,
-//       targetPrice,
-//       message,
-//     });
-
-//     await notification.save();
-
-//     console.log(`Notification created: ${symbol} alert at $${targetPrice.toFixed(2)}`);
-
-//     res.status(201).json(notification);
-//   } catch (error) {
-//     console.error('Create error:', error.message);
-//     res.status(400).json({ error: error.message });
-//   }
-// };
-
-
 
 export const createNotification = async (req, res) => {
   try {

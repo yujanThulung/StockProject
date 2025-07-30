@@ -22,12 +22,14 @@ export const ChartControls = ({ symbol }) => {
 
   const { fetchHistoricalData } = usePricePredictionStore();
 
-  // Trigger data reload on range change
-  useEffect(() => {
-    if (symbol && selectedRange) {
-      fetchHistoricalData(symbol);
-    }
-  }, [selectedRange, chartType, symbol, fetchHistoricalData]);
+  // // Trigger data reload on range change
+  // useEffect(() => {
+  //   if (symbol && selectedRange) {
+  //     fetchHistoricalData(symbol);
+  //   }
+  // }, [selectedRange, chartType, symbol]);
+
+
 
   return (
     <>

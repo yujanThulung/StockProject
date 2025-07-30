@@ -15,15 +15,14 @@ export default function StockSummary() {
     ticker,
     historicalData,
     stockData,
-    fetchAllData,
     error,
   } = useStockStore();
 
-  useEffect(() => {
-    if (ticker) {
-      fetchAllData(ticker);
-    }
-  }, [ticker, fetchAllData]);
+  // useEffect(() => {
+  //   if (ticker) {
+  //     historicalData(ticker);
+  //   }
+  // }, [ticker, historicalData]);
 
   const openStock =
     historicalData.length > 0 ? `$${historicalData[0].Open}` : "N/A";

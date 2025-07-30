@@ -14,11 +14,19 @@ const StockChart = () => {
     const selectedRange = useStockChartStore((state) => state.selectedRange);
     const fetchHistoricalData = usePricePredictionStore((state) => state.fetchHistoricalData);
 
-    useEffect(() => {
-        if (ticker && (!historicalData || historicalData.length === 0)) {
-            fetchHistoricalData(ticker);
-        }
-    }, [ticker, fetchHistoricalData, historicalData]);
+    // useEffect(() => {
+    //     if (ticker && (!historicalData || historicalData.length === 0)) {
+    //         fetchHistoricalData(ticker);
+    //     }
+    // }, [ticker, fetchHistoricalData, historicalData]);
+
+
+//     useEffect(() => {
+//   if (ticker) {
+//     fetchHistoricalData(ticker);
+//   }
+// }, [ticker, fetchHistoricalData]);
+
 
     // Transform historical data for chart display
     const transformedData = useMemo(() => {

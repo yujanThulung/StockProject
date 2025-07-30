@@ -8,9 +8,9 @@ const History = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   // Always run hooks — not inside conditionals
-  useEffect(() => {
-    if (ticker) fetchHistoricalData(ticker);
-  }, [ticker, fetchHistoricalData]);
+  // useEffect(() => {
+  //   if (ticker) fetchHistoricalData(ticker);
+  // }, [ticker, fetchHistoricalData]);
 
   const sortedData = useMemo(() => {
     if (!historicalData) return [];
