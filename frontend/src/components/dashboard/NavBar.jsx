@@ -23,7 +23,7 @@ const TopNav = () => {
   useEffect(() => {
     if (user?._id) {
       fetchNotifications(true);
-      listenForAlerts(user._id); // 🔥 Setup realtime alert listener
+      listenForAlerts(user._id); 
     }
   }, [user?._id]);
 

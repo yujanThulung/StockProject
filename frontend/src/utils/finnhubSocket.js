@@ -1,9 +1,10 @@
 let socket;
+import WebSocket from "ws";
 const subscribed = new Set();
 
 export const initFinnhubSocket = () => {
     if (!socket) {
-        const token = "d163otpr01qhvkj60i90d163otpr01qhvkj60i9g";
+        const token = process.env.FINNHUB_API_KEY;
         const socket = new WebSocket(`wss://ws.finnhub.io?token=${token}`);
 
         socket.onopen = () => {

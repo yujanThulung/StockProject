@@ -18,11 +18,7 @@ export default function StockSummary() {
     error,
   } = useStockStore();
 
-  // useEffect(() => {
-  //   if (ticker) {
-  //     historicalData(ticker);
-  //   }
-  // }, [ticker, historicalData]);
+
 
   const openStock =
     historicalData.length > 0 ? `$${historicalData[0].Open}` : "N/A";

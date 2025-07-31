@@ -4,11 +4,11 @@ import SummaryCard from "../../components/dashboard/price_prediction/SummeryCard
 import TickerSearch from "../../components/dashboard/price_prediction/TickerSearch.jsx";
 import usePricePredictionStore from "../../../store/usePricePrediction.store.js";
 
-const PricePredictionPage = ({ initialTicker = "PEP" }) => {
+const PricePredictionPage = ({ initialTicker = "MSFT" }) => {
     const { ticker, modelData, historicalData, loading, error, setTicker, fetchModelData } =
         usePricePredictionStore();
 
-        console.log("Response data:" , modelData);
+    console.log("Response data:", modelData);
 
     useEffect(() => {
         fetchModelData(initialTicker);
@@ -38,16 +38,16 @@ const PricePredictionPage = ({ initialTicker = "PEP" }) => {
     return (
         <div className="flex flex-row flex-wrap lg:flex-row gap-4 p-4 min-h-[80vh]">
             <div className="w-full flex flex-row flex-wrap gap-4">
+                <div className="w-full">
+                    <TickerSearch onSearch={handleTickerSearch} currentTicker={ticker} />
+                </div>
                 {/* Left section (70%) */}
                 <div className="flex flex-col gap-4 w-full lg:w-[70%]">
                     {modelData && <Chart data={modelData} ticker={ticker} />}
                 </div>
-                
+
                 {/* Right section (30%) */}
                 <div className="flex flex-col gap-4 w-full lg:w-[28%]">
-                    <div className="w-full">
-                        <TickerSearch onSearch={handleTickerSearch} currentTicker={ticker} />
-                    </div>
                     {modelData && <SummaryCard data={modelData} ticker={ticker} />}
                 </div>
             </div>

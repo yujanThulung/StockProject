@@ -17,7 +17,6 @@ import { useAuthStore } from "../../../store/authentication.store";
 const sidebarNavItems = [
     { icon: <LayoutDashboard size={20} />, text: "Overview", path: "/dashboard/overview" },
     { icon: <LineChart size={20} />, text: "Stock Prediction", path: "/dashboard/stock-prediction" },
-    { icon: <TrendingUp size={20} />, text: "Analytics", path: "/dashboard/analytics" },
     { icon: <Banknote  size={20} />, text: "Financial", path: "/dashboard/financial" },
     { icon: <List size={20} />, text: "Watch List", path: "/dashboard/watch-list" },
     { icon: <Bell size={20} />, text: "Notifications", path: "/dashboard/notifications" },
@@ -50,7 +49,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                 } h-20 border-b border-gray-200 bg-blue-950`}
             >
                 {isSidebarOpen && (
-                    <Link to="/">
+                    <Link to="/dashboard/overview">
                         <img src={logo} alt="logo" className="h-16 w-auto" />
                     </Link>
                 )}

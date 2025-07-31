@@ -71,7 +71,7 @@ const ApexCandlestickChart = () => {
         },
         xaxis: {
           type: "datetime",
-          labels: { show: true }, 
+          labels: { show: true },
         },
         yaxis: {
           tooltip: { enabled: true },
@@ -82,8 +82,8 @@ const ApexCandlestickChart = () => {
         plotOptions: {
           candlestick: {
             colors: {
-              upward: "#26a69a",
-              downward: "#ef5350",
+              upward: "#00C176",
+              downward: "#FF4560",
             },
           },
         },
@@ -101,10 +101,17 @@ const ApexCandlestickChart = () => {
         chart: {
           id: "volume-bar",
           type: "bar",
-          height: 100,
+          height: 120,
           brush: {
             enabled: true,
             target: "candlestick-chart",
+          },
+          selection: {
+            enabled: true,
+            xaxis: {
+              min: filtered[0]?.x,
+              max: filtered[filtered.length - 1]?.x,
+            },
           },
         },
         xaxis: {
@@ -112,9 +119,9 @@ const ApexCandlestickChart = () => {
           labels: { show: false },
         },
         yaxis: {
-          show: false,
           labels: {
             formatter: formatNumber,
+            show: false,
           },
         },
         plotOptions: {
@@ -146,23 +153,9 @@ const ApexCandlestickChart = () => {
   }, [historicalData, selectedRange]);
 
   return (
-    <div className="flex flex-col gap-2 relative">
-      {/* Volume (sent behind using margin) */}
-      <div id="chart-bar" className="absolute inset-0 z-0 mt-[116px] opacity-30">
-        {chartData.optionsBar?.chart &&
-          chartData.seriesBar?.[0]?.data?.length > 0 && (
-            <ReactApexChart
-              key="bar"
-              options={chartData.optionsBar}
-              series={chartData.seriesBar}
-              type="bar"
-              height={200}
-            />
-          )}
-      </div>
-
-      {/* Candlestick (in front) */}
-      <div id="chart-candlestick" className="z-10 relative">
+    <div className="flex flex-col gap-4">
+      {/* Candlestick Chart */}
+      <div id="chart-candlestick">
         {chartData.options?.chart && chartData.series?.[0]?.data?.length > 0 && (
           <ReactApexChart
             key="candlestick"
@@ -173,6 +166,20 @@ const ApexCandlestickChart = () => {
           />
         )}
       </div>
+
+      {/* //Volume Chart
+      <div id="chart-bar" className="-mt-38 z-10">
+        {chartData.optionsBar?.chart &&
+          chartData.seriesBar?.[0]?.data?.length > 0 && (
+            <ReactApexChart
+              key="bar"
+              options={chartData.optionsBar}
+              series={chartData.seriesBar}
+              type="bar"
+              height={120}
+            />
+          )}
+      </div> */}
     </div>
   );
 };

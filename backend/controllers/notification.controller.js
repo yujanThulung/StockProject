@@ -60,40 +60,6 @@ export const getNotifications = async (req, res) => {
   }
 };
 
-
-// Update notification (price and message)
-// export const updateNotification = async (req, res) => {
-//   try {
-//     const userId = req.user.userId;
-//     const { id } = req.params;
-//     const { targetPrice, message } = req.body;
-
-//     // Find and update the notification
-//     const updatedNotification = await Notification.findOneAndUpdate(
-//       { _id: id, userId }, // ensure the user owns this notification
-//       { targetPrice, message },
-//       { new: true } // return the updated document
-//     );
-
-//     if (!updatedNotification) {
-//       console.log(`Update failed: Notification with ID ${id} not found or unauthorized.`);
-//       return res.status(404).json({ error: 'Notification not found or unauthorized' });
-//     }
-
-//     console.log(`Notification updated: ${updatedNotification.symbol} alert updated successfully.`);
-
-//     res.json({
-//       message: `${updatedNotification.symbol} alert updated successfully`,
-//       data: updatedNotification
-//     });
-//   } catch (error) {
-//     console.error('Update error:', error.message);
-//     res.status(500).json({ error: error.message });
-//   }
-// };
-
-
-
 export const updateNotification = async (req, res) => {
   try {
     const userId = req.user.userId;

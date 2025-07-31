@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const trendingTickers = [
+  { symbol: 'MSFT', name: 'Microsoft Corporation' },
   { symbol: 'PEP', name: 'PepsiCo, Inc.' },
   { symbol: 'GOOGL', name: 'Alphabet Inc.' },
   { symbol: 'BABA', name: 'Alibaba Group Holding Ltd' },
@@ -8,7 +9,6 @@ const trendingTickers = [
   { symbol: 'DIS', name: 'The Walt Disney Company' },
   { symbol: 'TSLA', name: 'Tesla Inc.' },
   { symbol: 'NVDA', name: 'NVIDIA Corporation' },
-  { symbol: 'NFLX', name: 'Netflix Inc.' },
 ];
 
 const TickerSearch = ({ onSearch, currentTicker }) => {

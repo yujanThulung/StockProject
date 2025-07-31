@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { Line } from 'react-chartjs-2';
+import React, { useRef } from "react";
+import { Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -10,8 +10,8 @@ import {
     Tooltip,
     Legend,
     Filler,
-} from 'chart.js';
-import zoomPlugin from 'chartjs-plugin-zoom';
+} from "chart.js";
+import zoomPlugin from "chartjs-plugin-zoom";
 
 ChartJS.register(
     CategoryScale,
@@ -33,22 +33,23 @@ const Chart = ({ data, ticker }) => {
     const shiftedPredictedDates = data.predicted_dates;
 
     // Prepare data for chart
-    const allLabels = [...data.train_dates, ...data.test_dates, shiftedPredictedDates[shiftedPredictedDates.length - 1]];
-    
-    const allTrainPrices = [
-        ...data.train_prices,
-        ...Array(data.test_prices.length + 1).fill(null),
+    const allLabels = [
+        ...data.train_dates,
+        ...data.test_dates,
+        shiftedPredictedDates[shiftedPredictedDates.length - 1],
     ];
-    
+
+    const allTrainPrices = [...data.train_prices, ...Array(data.test_prices.length + 1).fill(null)];
+
     const allTestPrices = [
         ...Array(data.train_prices.length).fill(null),
         ...data.test_prices,
-        null // For the last predicted day
+        null,
     ];
-    
+
     const allPredictedPrices = [
         ...Array(data.train_prices.length).fill(null),
-        ...shiftedPredictedPrices
+        ...shiftedPredictedPrices,
     ];
 
     // Show last 30 days by default
@@ -90,6 +91,10 @@ const Chart = ({ data, ticker }) => {
         }
     };
 
+    // Confidence Level from R²
+    const r2 = data?.metrics?.r2;
+    const confidence = r2 !== undefined ? Math.max(0, Math.min(r2 * 100, 100)) : null;
+
     return (
         <div className="bg-white rounded-lg shadow-md p-6 h-full">
             <div className="flex justify-between items-center mb-4">
@@ -97,7 +102,11 @@ const Chart = ({ data, ticker }) => {
                     <h3 className="text-xl font-semibold text-gray-800">
                         {ticker} Price Prediction
                     </h3>
-                    <p className="text-gray-600">Model Accuracy (R²): {data.r_squared?.toFixed(3)||'-'}</p>
+                    {confidence !== null && (
+                        <p className="text-gray-600">
+                            Confidence Level: {confidence.toFixed(1)}%
+                        </p>
+                    )}
                 </div>
                 <button
                     onClick={handleResetZoom}

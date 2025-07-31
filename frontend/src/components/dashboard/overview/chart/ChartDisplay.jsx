@@ -36,7 +36,7 @@ const ChartDisplay = () => {
             low: item.Low,
             close: item.Close,
           },
-          numericValue: item.Close, // For area/line charts
+          numericValue: item.Close, 
           high: item.High,
           low: item.Low,
           change,
@@ -60,8 +60,6 @@ const ChartDisplay = () => {
         return <AreaChart chartData={chartData.map(d => ({ ...d, value: d.numericValue }))} trendColor={trendColor} />;
       case "Candlestick":
         return <CandlestickChart chartData={chartData} />;
-      case "Line":
-        return <LineChart chartData={chartData.map(d => ({ ...d, value: d.numericValue }))} trendColor={trendColor} />;
       default:
         return <AreaChart chartData={chartData.map(d => ({ ...d, value: d.numericValue }))} trendColor={trendColor} />;
     }

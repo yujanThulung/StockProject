@@ -63,7 +63,7 @@ function App() {
           <Route index element={<Overview />} />
           <Route path="overview" element={<Overview />} />
           <Route path="stock-prediction" element={<StockPrediction />} />
-          <Route path="analytics" element={<Analytics />} />
+          {/* <Route path="analytics" element={<Analytics />} /> */}
           <Route path="financial" element={<Financial />} />
           <Route path="watch-list" element={<WatchList />} />
           <Route path="notifications" element={<Notification />} />

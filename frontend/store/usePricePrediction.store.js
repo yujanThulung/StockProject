@@ -2,7 +2,7 @@ import { create } from "zustand";
 import axios from "axios";
 
 const usePricePredictionStore = create((set, get) => ({
-    ticker: "PEP",
+    ticker: "MSFT",
     modelData: null,
     historicalData: [],
     stockData: null,
@@ -26,18 +26,6 @@ const usePricePredictionStore = create((set, get) => ({
         }
     },
 
-    // // ✅ Fetch historical data only
-    // fetchHistoricalData: async (ticker) => {
-    //   try {
-    //     console.log("Fetching historical data for ticker:", ticker);
-    //     const response = await axios.post("http://localhost:8080/historical", { ticker });
-    //     if (response.data.status !== "success") throw new Error(response.data.message || "Historical fetch failed");
-    //     set({ historicalData: response.data.historical, error: null });
-    //   } catch (err) {
-    //     console.error("Error fetching historical data:", err);
-    //     set({ error: err.message, historicalData: [] });
-    //   }
-    // },
 
     historicalData: [],
     fetchedTickers: new Set(),
@@ -133,7 +121,7 @@ const usePricePredictionStore = create((set, get) => ({
     // ✅ Reset store
     reset: () =>
         set({
-            ticker: "PEP",
+            ticker: "MSFT",
             modelData: null,
             historicalData: [],
             stockData: null,

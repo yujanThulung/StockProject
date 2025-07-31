@@ -4,7 +4,6 @@ const useStockChartStore = create((set) => ({
   chartType: 'Area',
   chartTypes: [
     { label: 'Area', icon: 'Area' },
-    { label: 'Line', icon: 'Line' },
     { label: 'Candlestick', icon: 'Candlestick' }
   ],
   timeRanges: [

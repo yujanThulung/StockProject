@@ -1,16 +1,3 @@
-// import express from 'express';
-// import { createAlert, getAlerts, deleteAlert, updateAlert } from '../controllers/notification.controller.js';
-// import authenticate from '../middleware/authenticate.middleware.js';
-
-// const router = express.Router();
-
-// router.post('/alert', authenticate, createAlert);
-// router.put('/alert/:id', authenticate, updateAlert); // Assuming this is for updating an alert
-// router.get('/alert', authenticate, getAlerts);
-// router.delete('/alert/:id', authenticate, deleteAlert);
-
-// export default router;
-
 
 
 import express from 'express';

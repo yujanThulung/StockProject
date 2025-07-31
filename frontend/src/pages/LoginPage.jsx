@@ -12,17 +12,6 @@ const LoginPage = () => {
     const loading = useAuthStore((state) => state.loading);
     const navigate = useNavigate();
 
-    // In your handleSubmit function:
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     const res = await login(email, password);
-
-    //     if (res.success) {
-    //         navigate("/dashboard");
-    //     } else {
-    //         setError(res.message);
-    //     }
-    // };
 
 
     const handleSubmit = async (e) => {
