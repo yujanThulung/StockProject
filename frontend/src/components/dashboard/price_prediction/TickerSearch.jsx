@@ -13,7 +13,7 @@ const trendingTickers = [
 
 const TickerSearch = ({ onSearch, currentTicker }) => {
   const [searchTerm, setSearchTerm] = useState(currentTicker || '');
-  const [showTrending, setShowTrending] = useState(true);
+  const [showTrending, setShowTrending] = useState(false);
 
   // Set default search term when currentTicker changes
   useEffect(() => {

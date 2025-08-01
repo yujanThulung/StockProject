@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Bell, Sun, Moon, ChevronDown, ChevronUp, LogOut } from "lucide-react";
-import profile from "../../assets/profile.jpg";
+import profile from "../../assets/person.jpg";
 import { useAuthStore } from "../../../store/authentication.store";
 import { useNavigate } from "react-router-dom";
 import ProfileDetails from "./ProfileDetails";

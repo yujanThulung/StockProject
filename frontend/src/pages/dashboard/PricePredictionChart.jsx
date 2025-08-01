@@ -1,22 +1,36 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Chart from "../../components/dashboard/price_prediction/Chart.jsx";
 import SummaryCard from "../../components/dashboard/price_prediction/SummeryCard.jsx";
 import TickerSearch from "../../components/dashboard/price_prediction/TickerSearch.jsx";
 import usePricePredictionStore from "../../../store/usePricePrediction.store.js";
 
-const PricePredictionPage = ({ initialTicker = "MSFT" }) => {
-    const { ticker, modelData, historicalData, loading, error, setTicker, fetchModelData } =
-        usePricePredictionStore();
+const PricePredictionPage = ({ initialTicker = "MSFT"}) => {
+    const {
+        ticker,
+        modelData,
+        loading,
+        error,
+        setTicker,
+        fetchModelData,
+    } = usePricePredictionStore();
 
-    console.log("Response data:", modelData);
+    const hasFetchedInitialData = useRef(false);
 
     useEffect(() => {
-        fetchModelData(initialTicker);
-    }, []);
+        if (!hasFetchedInitialData.current) {
+            if (!ticker) {
+                setTicker(initialTicker);
+                fetchModelData(initialTicker);
+            }
+            hasFetchedInitialData.current = true;
+        }
+    }, [ setTicker, fetchModelData, ticker]);
 
     const handleTickerSearch = (newTicker) => {
-        setTicker(newTicker);
-        fetchModelData(newTicker);
+        if (newTicker !== ticker) {
+            setTicker(newTicker);
+            fetchModelData(newTicker);
+        }
     };
 
     if (loading) {
@@ -35,12 +49,14 @@ const PricePredictionPage = ({ initialTicker = "MSFT" }) => {
             </div>
         );
     }
+
     return (
         <div className="flex flex-row flex-wrap lg:flex-row gap-4 p-4 min-h-[80vh]">
             <div className="w-full flex flex-row flex-wrap gap-4">
                 <div className="w-full">
                     <TickerSearch onSearch={handleTickerSearch} currentTicker={ticker} />
                 </div>
+
                 {/* Left section (70%) */}
                 <div className="flex flex-col gap-4 w-full lg:w-[70%]">
                     {modelData && <Chart data={modelData} ticker={ticker} />}
