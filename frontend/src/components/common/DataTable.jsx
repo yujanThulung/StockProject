@@ -1,27 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Search, ChevronLeft, ChevronRight, X } from 'lucide-react';
 
-/**
- * Reusable paginated table component.
- *
- * Supports two pagination modes:
- *
- * CLIENT-SIDE (default):
- *   Pass `data` with all rows. DataTable handles search, filter, and pagination internally.
- *   Props: searchable, searchPlaceholder, searchKeys, filters, toolbar, pageSize
- *
- * SERVER-SIDE:
- *   Pass `pagination` + `onPageChange`. DataTable renders the pagination UI only.
- *   Search/filter are handled by the parent and should NOT be passed here.
- *   Props: pagination { total, page, limit, totalPages }, onPageChange(page)
- *
- * Common props:
- *   columns      {Array}    { key, label, render?(row), className?, headerClassName? }
- *   data         {Array}    Row objects (current page only in server mode).
- *   keyField     {string}   Field used as React key.
- *   loading      {boolean}  Shows loading row.
- *   emptyMessage {string}   Empty state text.
- */
 const DataTable = ({
   // Core
   columns,
