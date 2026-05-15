@@ -181,43 +181,7 @@ export const updateUser = async (req, res) => {
 
 
 
-  export const deleteUser = async (req, res)=>{
-    const {userIdToDelete} = req.query;
-    const {userId,role} = req.user;
 
-    try {
-      if(role !== 'admin'){
-        return res.status(401).json({
-          success:false,
-          message: 'Unauthorized! Only admins can delete users'
-        });
-      }
-
-      const userToDelete = await User.findById(userIdToDelete);
-      if(!userToDelete){
-        return res.status(404).json({
-          success:false,
-          message: 'User not found'
-        });
-      }
-
-      if(userToDelete.role === 'admin'){
-        return res.status(400).json({
-          success:false,
-          message: 'Cannot delete admin user'
-        });
-      }
-
-      await User.findByIdAndDelete(userIdToDelete);
-      res.status(200).json({
-        success:true,
-        message: 'User deleted successfully'
-      });
-    } catch (error) {
-      console.error('Delete user error:', error);
-      res.status(500).json({ message: 'Server error during user deletion' });
-    }
-  }
 
 
 

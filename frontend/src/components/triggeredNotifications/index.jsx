@@ -2,6 +2,9 @@ import React, { useEffect } from "react";
 import useNotificationStore from "../../../store/notification.store";
 import { FaTrashAlt } from "react-icons/fa";
 import { toast, Toaster } from "react-hot-toast";
+import Loader from "../common/Loader";
+import EmptyState from "../common/EmptyState";
+import { FiBellOff } from "react-icons/fi";
 
 const TriggeredNotifications = () => {
     const {
@@ -32,9 +35,13 @@ const TriggeredNotifications = () => {
             </h2>
 
             {loading ? (
-                <p className="text-center text-gray-500">Loading...</p>
+                <Loader text="Fetching notifications..." />
             ) : notifications.length === 0 ? (
-                <p className="text-center text-gray-500">No triggered notifications found.</p>
+                <EmptyState 
+                    icon={FiBellOff} 
+                    title="No triggered alerts" 
+                    description="You don't have any triggered notifications at the moment." 
+                />
             ) : (
                 <div className="space-y-6">
                     {notifications.map(({ _id, symbol, targetPrice, message }) => (

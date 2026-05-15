@@ -1,8 +1,10 @@
-// backend/routes/finnhub.js
 import express from 'express';
+import authenticate from '../middleware/authenticate.middleware.js';
 import { subscribe, unsubscribe, getSubscriptions } from '../services/finnhubService.js';
 
 const router = express.Router();
+
+router.use(authenticate);
 
 router.post('/subscribe', (req, res) => {
   const { symbol } = req.body;

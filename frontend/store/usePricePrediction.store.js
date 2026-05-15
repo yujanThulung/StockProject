@@ -1,11 +1,17 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import axios from "axios";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import axios from 'axios';
+import api from '../src/lib/axios.js';
+
+// Separate axios instance for the ML model server (no auth needed)
+const mlApi = axios.create({
+  baseURL: 'http://localhost:8080',
+});
 
 const usePricePredictionStore = create(
   persist(
     (set, get) => ({
-      ticker: "",
+      ticker: '',
       modelData: null,
       historicalData: [],
       stockData: null,
@@ -17,13 +23,12 @@ const usePricePredictionStore = create(
 
       fetchModelData: async (ticker) => {
         try {
-          const response = await axios.post("http://localhost:8080/predict", { ticker });
-          if (response.data.status !== "success")
-            throw new Error(response.data.message || "Model fetch failed");
+          const response = await mlApi.post('/predict', { ticker });
+          if (response.data.status !== 'success')
+            throw new Error(response.data.message || 'Model fetch failed');
           set({ modelData: response.data, error: null });
-          console.log("Fetched model data for ticker:", ticker);
         } catch (err) {
-          console.error("Error fetching model data:", err);
+          console.error('Error fetching model data:', err);
           set({ error: err.message, modelData: null });
         }
       },
@@ -33,29 +38,27 @@ const usePricePredictionStore = create(
         if (fetchedTickers.has(ticker)) return;
 
         try {
-          const response = await axios.post("http://localhost:8080/historical", { ticker });
-          if (response.data.status !== "success")
-            throw new Error(response.data.message || "Fetch failed");
+          const response = await mlApi.post('/historical', { ticker });
+          if (response.data.status !== 'success')
+            throw new Error(response.data.message || 'Fetch failed');
 
           set((state) => ({
             historicalData: response.data.historical,
             error: null,
             fetchedTickers: new Set([...state.fetchedTickers, ticker]),
           }));
-          console.log("Fetched historical data for ticker from single :", ticker);
         } catch (err) {
-          console.error("Error fetching historical data:", err);
+          console.error('Error fetching historical data:', err);
           set({ error: err.message, historicalData: [] });
         }
       },
 
       fetchOverviewData: async (ticker) => {
         try {
-          const response = await axios.get(`http://localhost:8000/api/overview/${ticker}`);
+          const response = await api.get(`/overview/${ticker}`);
           set({ stockData: response.data, error: null });
-          console.log("Fetched overview data for ticker:", ticker);
         } catch (err) {
-          console.error("Error fetching overview data:", err);
+          console.error('Error fetching overview data:', err);
           set({ error: err.message, stockData: null });
         }
       },
@@ -65,19 +68,16 @@ const usePricePredictionStore = create(
           set({ loading: true, error: null });
 
           const [modelRes, historicalRes, overviewRes] = await Promise.all([
-            axios.post("http://localhost:8080/predict", { ticker }),
-            axios.post("http://localhost:8080/historical", { ticker }),
-            axios.get(`http://localhost:8000/api/overview/${ticker}`),
+            mlApi.post('/predict', { ticker }),
+            mlApi.post('/historical', { ticker }),
+            api.get(`/overview/${ticker}`),
           ]);
 
-          if (modelRes.data.status !== "success" || historicalRes.data.status !== "success") {
+          if (modelRes.data.status !== 'success' || historicalRes.data.status !== 'success') {
             throw new Error(
-              modelRes.data.message ||
-                historicalRes.data.message ||
-                "Failed to fetch model or historical data"
+              modelRes.data.message || historicalRes.data.message || 'Failed to fetch data'
             );
           }
-          console.log("Fetched all data for ticker from all data fetch:", ticker);
 
           set({
             modelData: modelRes.data,
@@ -87,7 +87,7 @@ const usePricePredictionStore = create(
             error: null,
           });
         } catch (err) {
-          console.error("Error in fetchAllData:", err);
+          console.error('Error in fetchAllData:', err);
           set({
             loading: false,
             error: err.message,
@@ -105,17 +105,14 @@ const usePricePredictionStore = create(
           const barTime = new Date(bar.Date).toISOString();
 
           if (lastTime !== barTime || (last && last.Close !== bar.Close)) {
-            return {
-              historicalData: [...state.historicalData, bar],
-            };
+            return { historicalData: [...state.historicalData, bar] };
           }
-
           return {};
         }),
 
       reset: () =>
         set({
-          ticker: "MSFT",
+          ticker: '',
           modelData: null,
           historicalData: [],
           stockData: null,
@@ -124,8 +121,8 @@ const usePricePredictionStore = create(
         }),
     }),
     {
-      name: "price-prediction-storage", // localStorage key
-      partialize: (state) => ({ ticker: state.ticker }), // only persist ticker
+      name: 'price-prediction-storage',
+      partialize: (state) => ({ ticker: state.ticker }),
     }
   )
 );

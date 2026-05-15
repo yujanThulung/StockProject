@@ -1,5 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import usePricePredictionStore from "../../../store/usePricePrediction.store";
+import Loader from "../common/Loader";
+import EmptyState from "../common/EmptyState";
+import { FiBarChart2 } from "react-icons/fi";
 
 const PAGE_SIZE = 100;
 
@@ -27,10 +30,16 @@ const History = () => {
   const goNext = () => setCurrentPage((p) => Math.min(totalPages, p + 1));
 
   // Render logic AFTER hooks
-  if (loading) return <div className="p-6 text-center">Loading historical data...</div>;
+  if (loading) return <Loader text="Loading historical data..." />;
   if (error) return <div className="p-6 text-center text-red-600">Error: {error}</div>;
   if (!historicalData || historicalData.length === 0)
-    return <div className="p-6 text-center">No historical data available.</div>;
+    return (
+      <EmptyState 
+        icon={FiBarChart2} 
+        title="No historical data" 
+        description="We couldn't find any historical price data for this symbol." 
+      />
+    );
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 max-w-6xl mx-auto">

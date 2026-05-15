@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import useNotificationStore from "../../../store/notification.store";
 import { FaTrashAlt, FaEdit, FaSave, FaTimes, FaPlus } from "react-icons/fa";
 import { Toaster, toast } from "react-hot-toast";
+import Loader from "../common/Loader";
+import EmptyState from "../common/EmptyState";
+import { FiBell } from "react-icons/fi";
 
 const NotificationManager = () => {
   const {
@@ -226,10 +229,14 @@ const NotificationManager = () => {
       )}
 
       <div className="space-y-6">
-        {notifications.length === 0 && !loading ? (
-          <p className="text-center text-gray-500 text-lg">
-            No notifications yet. Add one above!
-          </p>
+        {loading ? (
+          <Loader text="Loading alerts..." />
+        ) : notifications.length === 0 ? (
+          <EmptyState 
+            icon={FiBell} 
+            title="No alerts yet" 
+            description="Add a price alert above to start monitoring stock prices." 
+          />
         ) : (
           notifications
             .filter((n) => n.triggered === false)

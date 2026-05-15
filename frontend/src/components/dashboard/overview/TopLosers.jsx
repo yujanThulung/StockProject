@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { TrendingDown,Rocket,Info, TrendingDownIcon } from "lucide-react";
+import { TrendingDown, Rocket, Info, TrendingDownIcon } from "lucide-react";
 import useStockStore from "../../../../store/useStockData.store.js";
+import Loader from "../../common/Loader.jsx";
 
 const TopLosers = () => {
   const { losers, fetchLosers, loading, error } = useStockStore();
@@ -11,7 +12,7 @@ const TopLosers = () => {
   }, [fetchLosers]);
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -29,7 +30,7 @@ const TopLosers = () => {
       </div>
 
       {loading ? (
-        <p className="text-center text-red-600 dark:text-red-400">Loading...</p>
+        <Loader size="sm" text="Fetching losers..." />
       ) : error ? (
         <p className="text-center text-red-500">Error: {error}</p>
       ) : (

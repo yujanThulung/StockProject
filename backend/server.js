@@ -12,10 +12,10 @@ import connectDB from './config/db.js';
 import { startScheduledJobs } from './jobs/dailyUpdate.js';
 import authRoutes from './routes/auth.route.js';
 import watchlistRoutes from './routes/watchlist.route.js';
-import authenticate from './middleware/authenticate.middleware.js';
 import notificationRoutes from './routes/notification.route.js';
 import { connectWebSocket, setSocketIO } from './services/finnhubService.js';
 import finnhubRoutes from './routes/finnhub.route.js';
+import adminRoutes from './routes/admin.route.js';
 
 dotenv.config();
 
@@ -47,9 +47,10 @@ app.get('/', (_req, res) => {
 app.use('/api', authRoutes);
 app.use('/api', stockRoutes);
 app.use('/api', overview);
-app.use('/api/watchlist', authenticate, watchlistRoutes);
+app.use('/api/watchlist', watchlistRoutes);
 app.use('/api/alert', notificationRoutes);
 app.use('/api/finnhub', finnhubRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Socket.io connections
 io.on('connection', (socket) => {

@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { TrendingUp, Rocket, Info } from "lucide-react";
 import useStockStore from "../../../../store/useStockData.store.js";
+import Loader from "../../common/Loader.jsx";
 
 const TopGainers = () => {
   const { gainers, fetchGainers, loading, error } = useStockStore();
@@ -11,7 +12,7 @@ const TopGainers = () => {
   }, [fetchGainers]);
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -29,7 +30,7 @@ const TopGainers = () => {
       </div>
 
       {loading ? (
-        <p className="text-center text-emerald-600 dark:text-emerald-400">Loading...</p>
+        <Loader size="sm" text="Fetching gainers..." />
       ) : error ? (
         <p className="text-center text-red-500">Error: {error}</p>
       ) : (

@@ -1,24 +1,8 @@
-// import React from 'react';
-
-// import {Navigate} from 'react-router-dom';
-// import {useCookies} from 'react-cookie';
-
-
-// const ProtectedRoute = ({children})=>{
-//     const[cookies] = useCookies(['token']);
-    
-//     if(!cookies.token){
-//         return <Navigate to="/login" replace/>;
-//     }
-
-//     return children;
-// }
-
-// export default ProtectedRoute;
 
 import React, { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuthStore } from "../../store/authentication.store";
+import Loader from "../components/common/Loader";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading, checkAuth } = useAuthStore();
@@ -30,7 +14,7 @@ const ProtectedRoute = ({ children }) => {
     }
   }, [isAuthenticated, loading, checkAuth]);
 
-  if (loading) return <div className="text-white">Loading...</div>;
+  if (loading) return <div className="min-h-screen bg-slate-900 flex items-center justify-center"><Loader text="Verifying session..." /></div>;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
 
   return children;
