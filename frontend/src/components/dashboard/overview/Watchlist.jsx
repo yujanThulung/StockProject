@@ -19,6 +19,8 @@ import {
   FiDatabase,
 } from "react-icons/fi";
 import { Toaster, toast } from "react-hot-toast";
+import Loader from "../../common/Loader";
+import EmptyState from "../../common/EmptyState";
 
 export default function Watchlist() {
   const {
@@ -130,8 +132,8 @@ export default function Watchlist() {
         </div>
       </div>
 
-      <div className="flex gap-2 mb-6">
-        <div className="relative flex-1">
+      <div className="flex flex-end gap-2 mb-6">
+        <div className="relative">
           <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
             ref={inputRef}
@@ -164,10 +166,7 @@ export default function Watchlist() {
       </div>
 
       {watchlistLoading && (
-        <div className="flex items-center justify-center py-8">
-          <FiLoader className="animate-spin mr-2" />
-          Loading watchlist...
-        </div>
+        <Loader text="Loading watchlist..." />
       )}
 
       <ul className="space-y-4">
@@ -205,8 +204,8 @@ export default function Watchlist() {
           const bgColor = isUp
             ? "bg-green-600 border-green-600"
             : isDown
-            ? "bg-red-600 border-red-600"
-            : "bg-blue-600 border-blue-600";
+              ? "bg-red-600 border-red-600"
+              : "bg-blue-600 border-blue-600";
 
           const ArrowIcon = isUp ? FiTrendingUp : isDown ? FiTrendingDown : FiMinus;
 
@@ -268,11 +267,11 @@ export default function Watchlist() {
       </ul>
 
       {watchlist.length === 0 && !watchlistLoading && (
-        <div className="text-center py-8 text-gray-500">
-          <FiDatabase className="mx-auto mb-2" size={48} />
-          <p>No symbols in your watchlist</p>
-          <p className="text-sm">Add a ticker symbol to get started</p>
-        </div>
+        <EmptyState 
+          icon={FiDatabase} 
+          title="No symbols in your watchlist" 
+          description="Add a ticker symbol to get started" 
+        />
       )}
     </div>
   );

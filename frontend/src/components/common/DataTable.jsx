@@ -1,5 +1,8 @@
 import { useState, useMemo } from 'react';
 import { Search, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import Loader from './Loader';
+import EmptyState from './EmptyState';
+import { FiInbox } from 'react-icons/fi';
 
 const DataTable = ({
   // Core
@@ -131,11 +134,19 @@ const DataTable = ({
             <tbody className="divide-y divide-gray-100">
               {loading && paginated.length === 0 ? (
                 <tr>
-                  <td colSpan={colSpan} className="px-6 py-12 text-center text-gray-400">Loading...</td>
+                  <td colSpan={colSpan} className="px-6 py-4">
+                    <Loader text="Loading data..." />
+                  </td>
                 </tr>
               ) : paginated.length === 0 ? (
                 <tr>
-                  <td colSpan={colSpan} className="px-6 py-12 text-center text-gray-400">{emptyMessage}</td>
+                  <td colSpan={colSpan} className="px-6 py-4">
+                    <EmptyState 
+                      icon={FiInbox} 
+                      title={emptyMessage} 
+                      className="py-8"
+                    />
+                  </td>
                 </tr>
               ) : (
                 paginated.map((row) => (

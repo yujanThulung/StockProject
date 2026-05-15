@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import useWatchlistStore from "../store/watchlistStore.js";
+import Loader from "./components/common/Loader.jsx";
 
 const Dashboard = lazy(() => import("./pages/dashboard/Dashboard.jsx"));
 const Overview = lazy(() => import("./pages/dashboard/Overview.jsx"));
@@ -30,7 +31,7 @@ function App() {
   }, []);
 
   return (
-    <Suspense fallback={<div className="text-white p-4">Loading...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-slate-900 flex items-center justify-center"><Loader text="Initializing application..." /></div>}>
       <Routes>
         <Route
           path="/"

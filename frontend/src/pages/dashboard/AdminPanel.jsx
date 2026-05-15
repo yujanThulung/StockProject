@@ -4,6 +4,7 @@ import useAdminStore from '../../../store/adminStore.js';
 import { useAuthStore } from '../../../store/authentication.store.js';
 import DataTable from '../../components/common/DataTable.jsx';
 import useQueryParams from '../../hooks/useQueryParams.js';
+import Loader from '../../components/common/Loader.jsx';
 
 const ROLES = ['user', 'admin'];
 
@@ -201,15 +202,18 @@ const UserManagement = () => {
       </div>
 
       {/* Table */}
-      <DataTable
-        columns={columns}
-        data={users}
-        keyField="_id"
-        loading={loading}
-        emptyMessage="No users found"
-        pagination={pagination}
-        onPageChange={handlePageChange}
-      />
+      <div className="relative">
+        {loading && users.length > 0 && <Loader overlay text="Updating..." />}
+        <DataTable
+          columns={columns}
+          data={users}
+          keyField="_id"
+          loading={loading && users.length === 0}
+          emptyMessage="No users found"
+          pagination={pagination}
+          onPageChange={handlePageChange}
+        />
+      </div>
 
       {/* Delete confirmation modal */}
       {confirmDelete && (
