@@ -1,24 +1,17 @@
-import axios from "axios";
-import TopLoser from "../models/TopLoser.model.js";
+import axios from 'axios';
+import TopLoser from '../models/TopLoser.model.js';
 
-// import dotenv from "dotenv";
-
-// dotenv.config();
-// const FMP_API_KEY = process.env.FMP_API_KEY;
-
-
-// console.log(process.env.FMP_API_KEY);
 const fetchAndStoreTopLosers = async () => {
   try {
-    const res = await axios.get(`https://financialmodelingprep.com/api/v3/stock_market/losers?apikey=${process.env.FMP_API_KEY}`);
-    
-    console.log("I am in fetchAndStoreTopLosers.service.js");
+    const res = await axios.get(
+      `https://financialmodelingprep.com/api/v3/stock_market/losers?apikey=${process.env.FMP_API_KEY}`
+    );
 
     const data = res.data.slice(0, 15);
 
     await TopLoser.deleteMany({});
     await TopLoser.insertMany(
-      data.map(item => ({
+      data.map((item) => ({
         symbol: item.symbol,
         name: item.name,
         price: item.price,
@@ -28,9 +21,9 @@ const fetchAndStoreTopLosers = async () => {
       }))
     );
 
-    console.log("✅ Top Losers updated");
+    console.log('Top Losers updated');
   } catch (error) {
-    console.error("❌ Error fetching top losers:", error.message);
+    console.error('Error fetching top losers:', error.message);
   }
 };
 
