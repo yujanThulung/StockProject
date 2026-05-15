@@ -4,12 +4,27 @@ import { User } from '../models/index.model.js';
 export const getAllUsers = async (req, res) => {
   try {
     const page = Math.max(1, parseInt(req.query.page) || 1);
-    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 20));
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 10));
     const skip = (page - 1) * limit;
+    const search = req.query.search?.trim();
+    const role = req.query.role?.trim();
+
+    const query = {};
+
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } },
+      ];
+    }
+
+    if (role && ['user', 'admin'].includes(role)) {
+      query.role = role;
+    }
 
     const [users, total] = await Promise.all([
-      User.find().select('-password').sort({ createdAt: -1 }).skip(skip).limit(limit),
-      User.countDocuments(),
+      User.find(query).select('-password').sort({ createdAt: -1 }).skip(skip).limit(limit),
+      User.countDocuments(query),
     ]);
 
     res.status(200).json({
@@ -19,7 +34,7 @@ export const getAllUsers = async (req, res) => {
         total,
         page,
         limit,
-        totalPages: Math.ceil(total / limit),
+        totalPages: Math.ceil(total / limit) || 1,
       },
     });
   } catch (error) {
