@@ -1,4 +1,4 @@
-import User from './user.model.js';
+import User from './User.model.js';
 import OverviewModel from './Overview.model.js';
 import TopGainerModel from './TopGainer.model.js';
 import TopLoserModel from './TopLoser.model.js';

@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import colors from 'colors';
 import cookieParser from 'cookie-parser';
 import http from 'http';
 import { Server } from 'socket.io';
@@ -15,16 +14,13 @@ import authRoutes from './routes/auth.route.js';
 import watchlistRoutes from './routes/watchlist.route.js';
 import authenticate from './middleware/authenticate.middleware.js';
 import notificationRoutes from './routes/notification.route.js';
-import { startPriceWatcher } from './services/priceWatcher.service.js';
-
-// 🆕 Finnhub WebSocket Manager
 import { connectWebSocket, setSocketIO } from './services/finnhubService.js';
 import finnhubRoutes from './routes/finnhub.route.js';
 
 dotenv.config();
 
 const app = express();
-const server = http.createServer(app); // For socket.io
+const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: 'http://localhost:5173',
@@ -33,8 +29,6 @@ const io = new Server(server, {
 });
 
 const PORT = process.env.PORT || 8000;
-
-console.log('🔧 Initializing server setup...');
 
 // Middleware
 app.use(cors({
@@ -47,8 +41,8 @@ app.use(cookieParser());
 app.use(logTimeCounter);
 
 // Routes
-app.get('/', (req, res) => {
-  res.send('✅ Server is running...');
+app.get('/', (_req, res) => {
+  res.send('Server is running');
 });
 app.use('/api', authRoutes);
 app.use('/api', stockRoutes);
@@ -57,47 +51,42 @@ app.use('/api/watchlist', authenticate, watchlistRoutes);
 app.use('/api/alert', notificationRoutes);
 app.use('/api/finnhub', finnhubRoutes);
 
-// 🔌 Handle socket.io connections
-io.on("connection", (socket) => {
-  console.log("🔌 New client connected:", socket.id);
+// Socket.io connections
+io.on('connection', (socket) => {
+  console.log('New client connected:', socket.id);
 
-  socket.on("join-room", (symbol) => {
+  socket.on('join-room', (symbol) => {
     symbol = symbol.toUpperCase();
     socket.join(symbol);
-    console.log(`📥 Socket ${socket.id} joined room: ${symbol}`);
+    console.log(`Socket ${socket.id} joined room: ${symbol}`);
   });
 
-  socket.on("subscribe", (symbol) => {
-    console.log(`📡 Client subscribed to ${symbol}`);
-    // optional: you could call subscribe(symbol) here too
+  socket.on('subscribe', (symbol) => {
+    console.log(`Client subscribed to ${symbol}`);
   });
 
-  socket.on("unsubscribe", (symbol) => {
+  socket.on('unsubscribe', (symbol) => {
     socket.leave(symbol);
-    console.log(`📤 Socket ${socket.id} left room: ${symbol}`);
+    console.log(`Socket ${socket.id} left room: ${symbol}`);
   });
 
-  socket.on("disconnect", () => {
-    console.log("❌ Client disconnected:", socket.id);
+  socket.on('disconnect', () => {
+    console.log('Client disconnected:', socket.id);
   });
 });
 
-
-// Inject io into service
 setSocketIO(io);
-connectWebSocket(); 
+connectWebSocket();
 
-// Start app
 const start = async () => {
   try {
     await connectDB();
     server.listen(PORT, () => {
-      console.log(`🚀 Server is running on port ${PORT}`);
-      console.log(`🌐 http://localhost:${PORT}`.yellow.bold);
-      startScheduledJobs(); // Optional: your cron or daily jobs
+      console.log(`Server is running on port ${PORT}`);
+      startScheduledJobs();
     });
   } catch (error) {
-    console.error('❌ Error during server startup:', error.message);
+    console.error('Error during server startup:', error.message);
     process.exit(1);
   }
 };
