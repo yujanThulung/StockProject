@@ -146,8 +146,8 @@ def sentiment_by_ticker(request: TickerSentimentRequest):
     # Combine Headline and Summary as per training data
     combined_texts = []
     for a in articles_to_score:
-        h = a.get("headline", "").strip()
-        s = a.get("summary", "").strip()
+        h = str(a.get("headline") or "").strip()
+        s = str(a.get("summary") or "").strip()
         combined = f"{h}. {s}" if s else h
         combined_texts.append(combined)
 

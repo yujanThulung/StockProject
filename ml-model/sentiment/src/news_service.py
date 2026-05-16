@@ -2,6 +2,7 @@ import os
 import json
 import requests
 import pandas as pd
+import numpy as np
 from pathlib import Path
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
@@ -51,6 +52,9 @@ def _read_cache(key: str) -> list[dict]:
         return []
     try:
         df = pd.read_csv(f)
+        # Handle NaN and Inf values which cause JSON serialization errors
+        df = df.replace([np.inf, -np.inf], np.nan)
+        df = df.where(pd.notnull(df), None)
         return df.to_dict(orient="records")
     except Exception:
         return []

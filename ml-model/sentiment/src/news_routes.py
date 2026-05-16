@@ -15,6 +15,8 @@ def latest_news(limit: int = Query(default=20, ge=1, le=100)):
             "articles": articles_sorted[:limit],
         }
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -30,4 +32,6 @@ def ticker_news(ticker: str, limit: int = Query(default=10, ge=1, le=50)):
             "articles": articles_sorted[:limit],
         }
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
