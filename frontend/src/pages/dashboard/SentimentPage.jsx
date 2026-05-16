@@ -472,15 +472,12 @@ const AnalyticsPage = () => {
     setTicker(t);
     fetchModelData(t);
   };
-
-  // Auto-run on mount using the persisted ticker from the store (same as Financial page)
   useEffect(() => {
-    if (storeTicker && !sentimentResult && !modelData && !sLoading && !pLoading) {
-      setActiveTicker(storeTicker);
-      analyzeSentiment(storeTicker);
-      fetchModelData(storeTicker);
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    if (!storeTicker) return;
+    setActiveTicker(storeTicker);
+    analyzeSentiment(storeTicker);
+    fetchModelData(storeTicker);
+  }, []); 
 
   useEffect(() => () => clearTickerData(), [clearTickerData]);
 
