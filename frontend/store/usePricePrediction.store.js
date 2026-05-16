@@ -22,14 +22,15 @@ const usePricePredictionStore = create(
       setTicker: (newTicker) => set({ ticker: newTicker }),
 
       fetchModelData: async (ticker) => {
+        set({ loading: true, error: null });
         try {
           const response = await mlApi.post('/predict', { ticker });
           if (response.data.status !== 'success')
             throw new Error(response.data.message || 'Model fetch failed');
-          set({ modelData: response.data, error: null });
+          set({ modelData: response.data, loading: false, error: null });
         } catch (err) {
           console.error('Error fetching model data:', err);
-          set({ error: err.message, modelData: null });
+          set({ error: err.message, modelData: null, loading: false });
         }
       },
 
@@ -37,6 +38,7 @@ const usePricePredictionStore = create(
         const { fetchedTickers } = get();
         if (fetchedTickers.has(ticker)) return;
 
+        set({ loading: true, error: null });
         try {
           const response = await mlApi.post('/historical', { ticker });
           if (response.data.status !== 'success')
@@ -44,22 +46,24 @@ const usePricePredictionStore = create(
 
           set((state) => ({
             historicalData: response.data.historical,
+            loading: false,
             error: null,
             fetchedTickers: new Set([...state.fetchedTickers, ticker]),
           }));
         } catch (err) {
           console.error('Error fetching historical data:', err);
-          set({ error: err.message, historicalData: [] });
+          set({ error: err.message, historicalData: [], loading: false });
         }
       },
 
       fetchOverviewData: async (ticker) => {
+        set({ loading: true, error: null });
         try {
           const response = await api.get(`/overview/${ticker}`);
-          set({ stockData: response.data, error: null });
+          set({ stockData: response.data, loading: false, error: null });
         } catch (err) {
           console.error('Error fetching overview data:', err);
-          set({ error: err.message, stockData: null });
+          set({ error: err.message, stockData: null, loading: false });
         }
       },
 

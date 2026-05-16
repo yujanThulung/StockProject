@@ -1,22 +1,22 @@
 import { Link } from 'react-router-dom';
 import {
   LayoutDashboard,
-  LineChart,
   Banknote,
   List,
   Bell,
   Menu,
   Users,
+  Sparkles,
 } from 'lucide-react';
 import logo from '../../assets/logo1.png';
 import { useAuthStore } from '../../../store/authentication.store';
 
 const navItems = [
-  { icon: <LayoutDashboard size={20} />, text: 'Overview', path: '/dashboard/overview' },
-  { icon: <LineChart size={20} />, text: 'Stock Prediction', path: '/dashboard/stock-prediction' },
-  { icon: <Banknote size={20} />, text: 'Financial', path: '/dashboard/financial' },
-  { icon: <List size={20} />, text: 'Watch List', path: '/dashboard/watch-list' },
-  { icon: <Bell size={20} />, text: 'Notifications', path: '/dashboard/notifications' },
+  { icon: <LayoutDashboard size={20} />, text: 'Overview',    path: '/dashboard/overview' },
+  { icon: <Sparkles size={20} />,        text: 'AI Insights', path: '/dashboard/ai-insights' },
+  { icon: <Banknote size={20} />,        text: 'Financial',   path: '/dashboard/financial' },
+  { icon: <List size={20} />,            text: 'Watch List',  path: '/dashboard/watch-list' },
+  { icon: <Bell size={20} />,            text: 'Notifications', path: '/dashboard/notifications' },
 ];
 
 const adminItem = {
@@ -33,15 +33,13 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
 
   return (
     <div
-      className={`bg-white shadow-lg transition-all duration-300 ease-in-out ${
-        isSidebarOpen ? 'w-64' : 'w-20'
-      } relative h-screen flex flex-col`}
+      className={`bg-white shadow-lg transition-all duration-300 ease-in-out ${isSidebarOpen ? 'w-64' : 'w-20'
+        } relative h-screen flex flex-col`}
     >
       {/* Header */}
       <div
-        className={`flex items-center ${
-          isSidebarOpen ? 'justify-between px-6' : 'justify-center'
-        } h-20 border-b border-gray-200 bg-blue-950`}
+        className={`flex items-center ${isSidebarOpen ? 'justify-between px-6' : 'justify-center'
+          } h-20 border-b border-gray-200 bg-blue-950`}
       >
         {isSidebarOpen && (
           <Link to="/dashboard/overview">
@@ -64,18 +62,16 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
             <li key={item.path}>
               <Link
                 to={item.path}
-                className={`flex items-center p-3 rounded-lg hover:bg-gray-100 text-gray-700 ${
-                  isSidebarOpen ? '' : 'justify-center'
-                }`}
+                className={`flex items-center p-3 rounded-lg hover:bg-gray-100 text-gray-700 ${isSidebarOpen ? '' : 'justify-center'
+                  }`}
                 title={!isSidebarOpen ? item.text : ''}
               >
                 <div className="flex-shrink-0">{item.icon}</div>
                 <span
-                  className={`ml-3 transition-opacity duration-200 ease-in-out ${
-                    isSidebarOpen
+                  className={`ml-3 transition-opacity duration-200 ease-in-out ${isSidebarOpen
                       ? 'opacity-100'
                       : 'opacity-0 w-0 h-0 overflow-hidden absolute'
-                  }`}
+                    }`}
                 >
                   {item.text}
                 </span>

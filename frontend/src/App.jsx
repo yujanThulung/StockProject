@@ -5,10 +5,9 @@ import Loader from "./components/common/Loader.jsx";
 
 const Dashboard = lazy(() => import("./pages/dashboard/Dashboard.jsx"));
 const Overview = lazy(() => import("./pages/dashboard/Overview.jsx"));
-const StockPrediction = lazy(() => import("./pages/dashboard/PricePredictionChart.jsx"));
-const Financial = lazy(() => import("./pages/dashboard/Financial.jsx"));
-const WatchList = lazy(() => import("./pages/dashboard/WatchList.jsx"));
+const Financial = lazy(() => import("./pages/dashboard/Financial.jsx"));const WatchList = lazy(() => import("./pages/dashboard/WatchList.jsx"));
 const Notification = lazy(() => import("./pages/dashboard/Notification.jsx"));
+const SentimentPage = lazy(() => import("./pages/dashboard/SentimentPage.jsx"));
 const AlertNotification = lazy(() => import("./components/triggeredNotifications"));
 
 const Navbar = lazy(() => import("./container/LandlingPage/Navbar.jsx"));
@@ -20,6 +19,7 @@ const HowItWorks = lazy(() => import("./container/LandlingPage/HowItWorks.jsx"))
 const FeaturesSection = lazy(() => import("./container/LandlingPage/FeaturesSection.jsx"));
 const Footer = lazy(() => import("./container/LandlingPage/Footer.jsx"));
 const GetPredictionSection = lazy(() => import("./container/LandlingPage/GetPredictionSection.jsx"));
+const LatestNewsSection = lazy(() => import("./container/LandlingPage/LatestNewsSection.jsx"));
 
 const ProtectedRoute = lazy(() => import("./routes/ProtectedRoute.jsx"));
 const AdminRoute = lazy(() => import("./routes/AdminRoute.jsx"));
@@ -42,6 +42,7 @@ function App() {
               <Gainers />
               <HowItWorks />
               <GetPredictionSection />
+              <LatestNewsSection />
               <FeaturesSection />
               <Footer />
             </div>
@@ -58,7 +59,7 @@ function App() {
         >
           <Route index element={<Overview />} />
           <Route path="overview" element={<Overview />} />
-          <Route path="stock-prediction" element={<StockPrediction />} />
+          <Route path="ai-insights" element={<SentimentPage />} />
           <Route path="financial" element={<Financial />} />
           <Route path="watch-list" element={<WatchList />} />
           <Route path="notifications" element={<Notification />} />
