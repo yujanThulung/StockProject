@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   Banknote,
@@ -12,11 +12,11 @@ import logo from '../../assets/logo1.png';
 import { useAuthStore } from '../../../store/authentication.store';
 
 const navItems = [
-  { icon: <LayoutDashboard size={20} />, text: 'Overview',    path: '/dashboard/overview' },
-  { icon: <Sparkles size={20} />,        text: 'AI Insights', path: '/dashboard/ai-insights' },
-  { icon: <Banknote size={20} />,        text: 'Financial',   path: '/dashboard/financial' },
-  { icon: <List size={20} />,            text: 'Watch List',  path: '/dashboard/watch-list' },
-  { icon: <Bell size={20} />,            text: 'Notifications', path: '/dashboard/notifications' },
+  { icon: <LayoutDashboard size={20} />, text: 'Overview', path: '/dashboard/overview' },
+  { icon: <Sparkles size={20} />, text: 'AI Insights', path: '/dashboard/ai-insights' },
+  { icon: <Banknote size={20} />, text: 'Fundamentals', path: '/dashboard/financial' },
+  { icon: <List size={20} />, text: 'Watch List', path: '/dashboard/watch-list' },
+  { icon: <Bell size={20} />, text: 'Notifications', path: '/dashboard/notifications' },
 ];
 
 const adminItem = {
@@ -28,6 +28,7 @@ const adminItem = {
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const user = useAuthStore((state) => state.user);
   const isAdmin = user?.role === 'admin';
+  const { pathname } = useLocation();
 
   const allItems = isAdmin ? [...navItems, adminItem] : navItems;
 
@@ -62,7 +63,10 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
             <li key={item.path}>
               <Link
                 to={item.path}
-                className={`flex items-center p-3 rounded-lg hover:bg-gray-100 text-gray-700 ${isSidebarOpen ? '' : 'justify-center'
+                className={`flex items-center p-3 rounded-lg transition-colors ${isSidebarOpen ? '' : 'justify-center'
+                  } ${pathname === item.path || pathname.startsWith(item.path + '/')
+                    ? 'bg-blue-950 text-white'
+                    : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 title={!isSidebarOpen ? item.text : ''}
               >
