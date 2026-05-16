@@ -5,6 +5,7 @@ import useStockChartStore from "../../../../../store/stockChartStore.store";
 import { CustomTooltip } from "./CustomTooltip";
 import AreaChart from "./AreaChart";
 import CandlestickChart from "./CandleChart";
+import Loader from "../../../common/Loader";
 // import LineChart from "./LineChart";
 
 const ChartDisplay = () => {
@@ -68,7 +69,7 @@ const ChartDisplay = () => {
   if (loading) {
     return (
       <div className="h-[300px] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-emerald-500"></div>
+        <Loader text="Loading chart data..." />
       </div>
     );
   }
