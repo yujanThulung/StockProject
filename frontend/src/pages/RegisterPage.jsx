@@ -1,130 +1,138 @@
-// src/pages/SignupPage.jsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../store/authentication.store';
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { User, Mail, Lock, Loader2 } from "lucide-react";
+import { useAuthStore } from "../../store/authentication.store";
+import logo from "../assets/logo1.png";
 
 const RegisterPage = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [name, setName]         = useState("");
+  const [email, setEmail]       = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError]       = useState("");
+  const [success, setSuccess]   = useState("");
 
-  const signup = useAuthStore((state) => state.signup);
-  const loading = useAuthStore((state) => state.loading);
+  const signup  = useAuthStore((s) => s.signup);
+  const loading = useAuthStore((s) => s.loading);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     const res = await signup({ name, email, password });
-    
     if (res.success) {
-      setSuccess('Account created successfully! Redirecting...');
-      setTimeout(() => navigate('/dashboard'), 1500);
+      setSuccess("Account created! Redirecting...");
+      setTimeout(() => navigate("/dashboard"), 1500);
     } else {
       setError(res.message);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
-          Create a new account
+    <div className="min-h-screen flex">
+      {/* ── Left: Brand panel ── */}
+      <div className="hidden lg:flex flex-1 bg-blue-950 flex-col items-center justify-center px-12 text-center">
+        <img src={logo} alt="logo" className="h-16 w-auto mb-8" />
+        <h2 className="text-4xl font-black text-white leading-tight mb-4">
+          Get<br />Started
         </h2>
+        <p className="text-blue-200 text-sm max-w-xs leading-relaxed mb-8">
+          Create your account and start tracking stocks, predictions, and market sentiment today.
+        </p>
+        <p className="text-blue-300 text-sm">
+          Already have an account?{" "}
+          <Link to="/login" className="text-white font-semibold hover:underline">
+            Sign in
+          </Link>
+        </p>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-gray-800 py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      {/* ── Right: Form ── */}
+      <div className="flex-1 flex items-center justify-center bg-white px-8 py-12">
+        <div className="w-full max-w-sm">
+          <h2 className="text-2xl font-bold text-gray-900 mb-7">Register</h2>
+
           {error && (
-            <div className="mb-4 bg-red-500 text-white p-3 rounded-md text-sm">
+            <div className="mb-4 bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-lg">
               {error}
             </div>
           )}
           {success && (
-            <div className="mb-4 bg-green-500 text-white p-3 rounded-md text-sm">
+            <div className="mb-4 bg-emerald-50 border border-emerald-200 text-emerald-600 text-sm px-4 py-3 rounded-lg">
               {success}
             </div>
           )}
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-300">
-                Full Name
+              <label className="block text-xs font-medium text-gray-600 mb-1.5">
+                Full name
               </label>
-              <div className="mt-1">
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
-                  id="name"
-                  name="name"
                   type="text"
-                  autoComplete="name"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-700 text-white"
+                  placeholder="John Doe"
+                  className="w-full border border-gray-200 rounded-lg py-2.5 pl-9 pr-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-950 focus:border-transparent"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300">
+              <label className="block text-xs font-medium text-gray-600 mb-1.5">
                 Email address
               </label>
-              <div className="mt-1">
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
-                  id="email"
-                  name="email"
                   type="email"
-                  autoComplete="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-700 text-white"
+                  placeholder="you@example.com"
+                  className="w-full border border-gray-200 rounded-lg py-2.5 pl-9 pr-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-950 focus:border-transparent"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300">
+              <label className="block text-xs font-medium text-gray-600 mb-1.5">
                 Password
               </label>
-              <div className="mt-1">
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
-                  id="password"
-                  name="password"
                   type="password"
-                  autoComplete="new-password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-700 text-white"
+                  placeholder="••••••••"
+                  className="w-full border border-gray-200 rounded-lg py-2.5 pl-9 pr-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-950 focus:border-transparent"
                 />
               </div>
-              <p className="mt-2 text-xs text-gray-400">
-                Password must contain at least 8 characters, including uppercase, number, and special character.
+              <p className="text-xs text-gray-400 mt-1.5">
+                Min. 8 characters with uppercase, number &amp; special character.
               </p>
             </div>
 
-            <div>
-              <button
-                type="submit"
-                disabled={loading}
-                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
-              >
-                {loading ? 'Creating account...' : 'Sign up'}
-              </button>
-            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-2 bg-blue-950 hover:bg-blue-900 disabled:opacity-50 text-white text-sm font-medium py-2.5 rounded-lg transition-colors"
+            >
+              {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+              {loading ? "Creating account..." : "Create account"}
+            </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-400">
-              Already have an account?{' '}
-              <a href="/login" className="font-medium text-indigo-400 hover:text-indigo-300">
-                Sign in
-              </a>
-            </p>
-          </div>
+          <p className="text-sm text-gray-400 mt-6">
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-950 font-semibold hover:underline">
+              Sign in
+            </Link>
+          </p>
         </div>
       </div>
     </div>
