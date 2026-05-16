@@ -12,13 +12,13 @@ const navLinks = [
 const Navbar = () => {
     return (
         <nav className="bg-gray-900 shadow-md ">
-            <div className="max-w-7xl mx-auto px-4 flex justify-between items-center z-50">
+            <div className="max-w-7xl mx-auto px-4 py-6 flex justify-between items-center z-50">
                 {/* Logo */}
                 <Link to="/" className="flex items-center">
                     <img
                         src={logo}
                         alt="Company Logo"
-                        className="w-26 h-26 object-contain hover:opacity-80 transition-opacity"
+                        className="h-8 w-auto object-contain hover:opacity-80 transition-opacity"
                     />
                 </Link>
 

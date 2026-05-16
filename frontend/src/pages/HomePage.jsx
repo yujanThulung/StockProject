@@ -20,7 +20,7 @@ const HomePage = () => {
                 <img
                     src={heroImage}
                     alt="Hero Blur"
-                    className="w-full max-w-md md:max-w-xl object-cover absolute z-0 rounded-xl inset-0 left-30 top-10 blur-[1px] opacity-40 "
+                    className="w-full max-w-md md:max-w-xl object-cover absolute z-0 rounded-xl inset-0 blur-[1px] opacity-40"
                 />
 
                 {/* Main Image */}

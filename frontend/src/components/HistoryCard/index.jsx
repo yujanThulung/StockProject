@@ -47,7 +47,7 @@ const History = () => {
         {ticker.toUpperCase()} Historical Data
       </h3>
 
-      <div className="overflow-x-auto max-h-[450px]">
+      <div className="overflow-x-auto max-h-[495px]">
         <table className="w-full divide-y divide-gray-200 table-auto">
           <thead className="bg-gray-800 sticky top-0 z-10">
             <tr>
