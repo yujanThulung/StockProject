@@ -7,9 +7,9 @@ const GetPredictionSection = () => {
         <section className="bg-slate-900 py-24 px-6 text-white relative">
             <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16">
                 {/* Left: Dual Images */}
-                <div className="flex gap-4 w-full lg:w-1/2 justify-center">
+        <div className="flex gap-4 w-full lg:w-1/2 justify-center overflow-hidden">
                     {/* First Image with Overlay */}
-                    <div className="relative w-[270px] h-[410px] rounded-lg overflow-hidden">
+                    <div className="relative w-[45%] max-w-[270px] h-[410px] rounded-lg overflow-hidden flex-shrink-0">
                         <img
                             src={getPredictionImage1}
                             alt="Prediction Visual 1"
@@ -19,7 +19,7 @@ const GetPredictionSection = () => {
                     </div>
 
                     {/* Second Image with Overlay */}
-                    <div className="relative w-[270px] h-[410px] rounded-lg overflow-hidden mt-20">
+                    <div className="relative w-[45%] max-w-[270px] h-[410px] rounded-lg overflow-hidden mt-20 flex-shrink-0">
                         <img
                             src={getPredictionImage2}
                             alt="Prediction Visual 2"

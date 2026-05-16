@@ -18,9 +18,6 @@ const TopLosers = () => {
           <TrendingDown className="w-4 h-4 text-red-500" />
           <h2 className="text-sm font-semibold text-gray-800">Top Losers</h2>
         </div>
-        <span className="text-xs text-red-600 bg-red-50 border border-red-100 px-2 py-0.5 rounded-full font-medium">
-          Today
-        </span>
       </div>
 
       {loading ? (

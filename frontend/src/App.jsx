@@ -5,7 +5,7 @@ import Loader from "./components/common/Loader.jsx";
 
 const Dashboard = lazy(() => import("./pages/dashboard/Dashboard.jsx"));
 const Overview = lazy(() => import("./pages/dashboard/Overview.jsx"));
-const Financial = lazy(() => import("./pages/dashboard/Financial.jsx"));const WatchList = lazy(() => import("./pages/dashboard/WatchList.jsx"));
+const Financial = lazy(() => import("./pages/dashboard/Financial.jsx")); const WatchList = lazy(() => import("./pages/dashboard/WatchList.jsx"));
 const Notification = lazy(() => import("./pages/dashboard/Notification.jsx"));
 const SentimentPage = lazy(() => import("./pages/dashboard/SentimentPage.jsx"));
 const AlertNotification = lazy(() => import("./components/triggeredNotifications"));
@@ -36,11 +36,11 @@ function App() {
         <Route
           path="/"
           element={
-            <div className="bg-slate-900 min-h-screen">
+            <div className="bg-slate-900 min-h-screen overflow-x-hidden">
               <Navbar />
               <HomePage />
-              <Gainers />
               <HowItWorks />
+              <Gainers />
               <GetPredictionSection />
               <LatestNewsSection />
               <FeaturesSection />

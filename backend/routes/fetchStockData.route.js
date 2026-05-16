@@ -4,6 +4,11 @@ import { fetchLosers, fetchGainers } from '../controllers/fetchTopGainerLosers.c
 
 const router = express.Router();
 
+// Public routes (for landing page)
+router.get('/public/top-losers', fetchLosers);
+router.get('/public/top-gainers', fetchGainers);
+
+// Authenticated routes
 router.get('/top-losers', authenticate, fetchLosers);
 router.get('/top-gainers', authenticate, fetchGainers);
 

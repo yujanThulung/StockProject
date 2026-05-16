@@ -31,7 +31,7 @@ const RegisterPage = () => {
     <div className="min-h-screen flex">
       {/* ── Left: Brand panel ── */}
       <div className="hidden lg:flex flex-1 bg-blue-950 flex-col items-center justify-center px-12 text-center">
-        <img src={logo} alt="logo" className="h-16 w-auto mb-8" />
+        <img src={logo} alt="logo" className="h-12 w-auto mb-8" />
         <h2 className="text-4xl font-black text-white leading-tight mb-4">
           Get<br />Started
         </h2>

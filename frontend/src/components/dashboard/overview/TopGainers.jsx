@@ -18,9 +18,6 @@ const TopGainers = () => {
           <TrendingUp className="w-4 h-4 text-emerald-500" />
           <h2 className="text-sm font-semibold text-gray-800">Top Gainers</h2>
         </div>
-        <span className="text-xs text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full font-medium">
-          Today
-        </span>
       </div>
 
       {loading ? (

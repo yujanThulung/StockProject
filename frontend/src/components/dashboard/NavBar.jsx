@@ -85,20 +85,20 @@ const TopNav = () => {
       )}
       <div className="flex items-center gap-6">
 
-        {/* Theme Toggle */}
-        <div className="flex items-center gap-2">
-          {darkMode ? (
-            <Sun
-              className="text-gray-200 cursor-pointer"
-              onClick={() => setDarkMode(false)}
-            />
-          ) : (
-            <Moon
-              className="text-gray-200 cursor-pointer"
-              onClick={() => setDarkMode(true)}
-            />
-          )}
-        </div>
+        {/* Theme Toggle
+        // <div className="flex items-center gap-2">
+        //   {darkMode ? (
+        //     <Sun
+        //       className="text-gray-200 cursor-pointer"
+        //       onClick={() => setDarkMode(false)}
+        //     />
+        //   ) : (
+        //     <Moon
+        //       className="text-gray-200 cursor-pointer"
+        //       onClick={() => setDarkMode(true)}
+        //     />
+        //   )}
+        // </div> */}
 
         {/* Notification Bell */}
         <div className="relative">

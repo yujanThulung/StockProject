@@ -51,7 +51,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
       >
         {isSidebarOpen && (
           <Link to="/dashboard/overview">
-            <img src={logo} alt="logo" className="h-16 w-auto" />
+            <img src={logo} alt="logo" className="h-6 w-auto" />
           </Link>
         )}
         <button
