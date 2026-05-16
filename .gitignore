@@ -1,17 +1,47 @@
+# --- IDEs & OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# --- Dependencies & Environments ---
 venv/
 venv310/
+ml-model/venv/
+ml-model/sentiment/venv/
 node_modules/
-*.ipynb_checkpoints
-*.pyc
+
+# --- Python Caches & Build ---
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
 *.save
+
+# --- Machine Learning Assets ---
+# These are large binary files. Usually, you don't track them in Git.
+# You should store them in an external storage or use Git LFS.
 *.h5
-ml-model/main.py
-ml-model/main.ipynb
-ml-model/.env
+*.pkl
+*.joblib
+ml-model/sentiment/data/models/*.pkl
 
+# --- Caches & Data ---
+# News cache and historical data should not be tracked
+ml-model/sentiment/data/news_cache/
+ml-model/twelve_data_cache/
+*.csv
 
-# Environment files
+# --- Environment Variables & Secrets ---
+# IMPORTANT: Never commit API keys!
 .env
 *.env
 backend/.env
+ml-model/.env
+ml-model/sentiment/.env
+
+# --- Logs ---
+*.log
+ml-model/sentiment/server.log
