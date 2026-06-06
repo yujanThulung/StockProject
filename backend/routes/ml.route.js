@@ -1,9 +1,9 @@
 import express from "express";
-import { 
-  analyzeSentiment, 
-  getLatestNews, 
-  getTickerNews, 
-  analyzeTickerSentiment 
+import {
+  analyzeSentiment,
+  getLatestNews,
+  getTickerNews,
+  analyzeTickerSentiment
 } from "../controllers/ml.controller.js";
 import { authenticate } from "../middleware/authenticate.middleware.js";
 
