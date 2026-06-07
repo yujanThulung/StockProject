@@ -51,7 +51,9 @@ StockProject/
 ├── backend/           # Node.js Express API    → port 8000
 └── ml-model/
     ├── lstm/          # LSTM prediction API    → port 8080
-    └── sentiment/     # Sentiment analysis API → port 5001
+    ├── sentiment/     # Sentiment analysis API → port 5001
+    ├── start.sh       # Unified launcher (Linux / macOS)
+    └── start.bat      # Unified launcher (Windows)
 ```
 
 ---
@@ -102,60 +104,90 @@ npm run dev
 
 ---
 
-### 4. LSTM Stock Prediction API
+### 4. ML Services — LSTM + Sentiment
 
-[![Flask](https://img.shields.io/badge/Flask-000000?logo=flask&logoColor=white)](https://flask.palletsprojects.com) &nbsp; Port `8080`
+Both ML services (LSTM and Sentiment) share a **single unified launcher** inside `ml-model/`.  
+Before running, make sure each service has its own Python virtual environment set up (see [Manual Setup](#manual-venv-setup) below).
 
-**Windows**
-```bat
-cd ml-model\lstm
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-venv\Scripts\python.exe run.py
-```
+#### Quick Start (Recommended)
 
 **Linux / macOS**
 ```bash
+cd ml-model
+chmod +x start.sh
+./start.sh
+```
+
+**Windows**
+```bat
+cd ml-model
+start.bat
+```
+
+The launcher starts both APIs simultaneously:
+
+| Service | URL |
+|---------|-----|
+| LSTM API | `http://localhost:8080` |
+| Sentiment API | `http://localhost:5001` |
+
+> **Linux/macOS**: Press `Ctrl+C` to stop both services at once.  
+> **Windows**: Close the two terminal windows that open.
+
+---
+
+#### Manual venv Setup
+
+If the virtual environments don't exist yet, create them once before using the launcher.
+
+**LSTM API**
+
+```bash
+# Linux / macOS
 cd ml-model/lstm
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-./venv/bin/python3 run.py
+deactivate
 ```
 
-> Use the venv's Python binary directly to avoid version mismatch issues between your system Python and the venv.
-
----
-
-### 5. Sentiment Analysis API
-
-[![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com) &nbsp; Port `5001`
-
-**Windows**
 ```bat
-cd ml-model\sentiment
+:: Windows
+cd ml-model\lstm
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
-python run.py
+deactivate
 ```
 
-**Linux / macOS**
+**Sentiment API**
+
 ```bash
+# Linux / macOS
 cd ml-model/sentiment
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-python3 run.py
+deactivate
 ```
+
+```bat
+:: Windows
+cd ml-model\sentiment
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+deactivate
+```
+
+> The launcher calls each service's venv Python binary directly (`./venv/bin/python3`) to avoid version conflicts with the system Python.
 
 ---
 
 ### All Services at a Glance
 
-| Service | URL | Status |
-|---------|-----|--------|
+| Service | URL | Notes |
+|---------|-----|-------|
 | Frontend | `http://localhost:5173` | React dev server |
 | Backend | `http://localhost:8000` | Express + Socket.IO |
 | LSTM API | `http://localhost:8080` | Flask prediction server |
@@ -167,40 +199,21 @@ python3 run.py
 
 ## Environment Variables
 
-> Refer to `.env.example` files in each directory for the full format.
+Each service ships with a `.env.example` file. Copy it to `.env` and fill in your values.
 
-### `backend/.env`
+| Service | Example File |
+|---------|-------------|
+| Backend | [`backend/.env.example`](backend/.env.example) |
+| Frontend | [`frontend/.env.example`](frontend/.env.example) |
+| LSTM API | [`ml-model/lstm/.env.example`](ml-model/lstm/.env.example) |
+| Sentiment API | [`ml-model/sentiment/.env.example`](ml-model/sentiment/.env.example) |
 
-```env
-MONGO_URI=your_mongodb_connection_string
-PORT=8000
-JWT_SECRET=your_jwt_secret
-
-FMP_API_KEY=your_fmp_api_key
-FINNHUB_API_KEY=your_finnhub_api_key
-FINNHUB_WEBSOCKET_URL=wss://ws.finnhub.io
-
-PYTHON_API_URL=http://127.0.0.1:5001
-LSTM_API_URL=http://127.0.0.1:8080
-```
-
-### `ml-model/lstm/.env`
-
-```env
-MODEL_PATH=multivariate_lstm_model.h5
-SCALER_PATH=scaler.save
-WINDOW_SIZE=60
-
-TWELVE_DATA_API_KEY=your_twelve_data_api_key
-API_KEY=your_alpha_vantage_api_key
-API_URL=https://www.alphavantage.co/query
-```
-
-### `frontend/.env`
-
-```env
-VITE_BACKEND_URL=http://localhost:8000
-VITE_FINNHUB_API_KEY=your_finnhub_public_api_key
+```bash
+# Quick copy commands
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+cp ml-model/lstm/.env.example ml-model/lstm/.env
+cp ml-model/sentiment/.env.example ml-model/sentiment/.env
 ```
 
 ---
