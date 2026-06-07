@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const PYTHON_API_URL = process.env.PYTHON_API_URL || "http://127.0.0.1:5000";
+const PYTHON_API_URL = process.env.PYTHON_API_URL || "http://127.0.0.1:5001";
 
 // Public: Get latest general news
 export const getLatestNews = async (req, res) => {
@@ -41,7 +41,7 @@ export const analyzeTickerSentiment = async (req, res) => {
     return res.status(200).json(response.data);
   } catch (error) {
     console.error("Error in analyzeTickerSentiment proxy:", error.message);
-    
+
     if (error.response) {
       return res.status(error.response.status).json(error.response.data);
     } else if (error.request) {

@@ -1,61 +1,77 @@
+<div align="center">
 
-# 📈 NuroStock
+# NuroStock
 
-**NuroStock** is a smart and easy-to-use stock prediction and alerting platform. It helps users visualize real-time market trends, make informed decisions with AI-driven predictions, and track their favorite stocks.
+**A smart stock prediction and alerting platform powered by AI.**  
+Visualize real-time market trends, get LSTM-based price predictions, and track your favorite stocks.
 
----
+<br/>
 
-## 🧠 Features
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![React](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react&logoColor=white&labelColor=20232A)](https://reactjs.org)
+[![Node.js](https://img.shields.io/badge/Backend-Node.js-339933?logo=node.js&logoColor=white)](https://nodejs.org)
+[![Flask](https://img.shields.io/badge/LSTM_API-Flask-000000?logo=flask&logoColor=white)](https://flask.palletsprojects.com)
+[![FastAPI](https://img.shields.io/badge/Sentiment_API-FastAPI-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
 
-- 🔐 User authentication
-- 📊 Real-time stock charts and volume
-- 📈 AI-based stock price prediction using LSTM (via Flask)
-- 📌 Add to Watchlist
-- 🔔 Set custom alerts for price conditions
-- 💡 View top gainers/losers
-- 📑 Financials and analytics overview
-
----
-
-## 🛠️ Tech Stack
-
-| Layer        | Tech Used                             |
-|--------------|----------------------------------------|
-| Frontend     | React, Zustand, ApexCharts, Tailwind   |
-| Backend      | Node.js, Express, MongoDB, Socket.IO   |
-| ML API       | Flask (Python 3.10, LSTM), Virtual Env |
-| Database     | MongoDB Atlas                          |
-| Deployment   | Render *(or run locally)*              |
+</div>
 
 ---
 
-## 🧪 Local Development Setup
+## Features
 
-### 🔧 Prerequisites
-
-- Node.js
-- Python 3.10
-- MongoDB (local or Atlas)
-- Git
-
----
-
----
-
-### ✅ 4. Add Installation Notes for Each Tech
-
-E.g., how to install:
-- Node.js: [https://nodejs.org](https://nodejs.org)
-- Python 3.10: [https://www.python.org/downloads/release/python-3100/](https://www.python.org/downloads/release/python-3100/)
-- MongoDB: [https://www.mongodb.com/atlas/database](https://www.mongodb.com/atlas/database)
-
-A small note like this helps new devs get started faster.
+- User authentication with JWT
+- Real-time stock charts and volume via Finnhub WebSocket
+- AI-based stock price prediction using LSTM
+- News sentiment analysis using a fine-tuned NLP model
+- Watchlist management
+- Custom price alerts
+- Top gainers / losers view
+- Financials and analytics overview
 
 ---
 
-### ✅ Step-by-Step Setup
+## Tech Stack
 
-#### 1. Clone the Repository
+| Layer | Technology |
+|-------|------------|
+| ![React](https://img.shields.io/badge/-React-61DAFB?logo=react&logoColor=white&labelColor=20232A) | React, Zustand, ApexCharts, Tailwind CSS |
+| ![Node.js](https://img.shields.io/badge/-Node.js-339933?logo=node.js&logoColor=white) | Express.js, Socket.IO, Mongoose |
+| ![MongoDB](https://img.shields.io/badge/-MongoDB-47A248?logo=mongodb&logoColor=white) | MongoDB Atlas |
+| ![Flask](https://img.shields.io/badge/-Flask-000000?logo=flask&logoColor=white) | LSTM prediction model (TensorFlow / Keras) |
+| ![FastAPI](https://img.shields.io/badge/-FastAPI-009688?logo=fastapi&logoColor=white) | Sentiment analysis (Transformers / Uvicorn) |
+
+---
+
+## Project Structure
+
+```
+StockProject/
+├── frontend/          # React app              → port 5173
+├── backend/           # Node.js Express API    → port 8000
+└── ml-model/
+    ├── lstm/          # LSTM prediction API    → port 8080
+    ├── sentiment/     # Sentiment analysis API → port 5001
+    ├── start.sh       # Unified launcher (Linux / macOS)
+    └── start.bat      # Unified launcher (Windows)
+```
+
+---
+
+## Prerequisites
+
+| Tool | Version | Download |
+|------|---------|----------|
+| ![Node.js](https://img.shields.io/badge/-Node.js-339933?logo=node.js&logoColor=white) | v18+ | [nodejs.org](https://nodejs.org) |
+| ![Python](https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white) | 3.10+ | [python.org](https://www.python.org/downloads/) |
+| ![MongoDB](https://img.shields.io/badge/-MongoDB-47A248?logo=mongodb&logoColor=white) | Atlas (cloud) | [mongodb.com/atlas](https://www.mongodb.com/atlas/database) |
+| ![Git](https://img.shields.io/badge/-Git-F05032?logo=git&logoColor=white) | Latest | [git-scm.com](https://git-scm.com) |
+
+---
+
+## Local Development Setup
+
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/yujanThulung/StockProject.git
@@ -64,21 +80,7 @@ cd StockProject
 
 ---
 
-#### 2. Run Flask ML API (Stock Predictor)
-
-```bash
-python -m venv venv310
-env310\Scripts\activate  
-pip install -r requirements.txt
-cd ml-model
-python run.py
-```
-
-> Make sure Flask runs on a dedicated port (e.g., `http://localhost:5000`)
-
----
-
-#### 3. Run Express Backend
+### 2. Backend — Node.js + Express
 
 ```bash
 cd backend
@@ -86,9 +88,11 @@ npm install
 npm start
 ```
 
+> Runs on `http://localhost:8000`
+
 ---
 
-#### 4. Run React Frontend
+### 3. Frontend — React
 
 ```bash
 cd frontend
@@ -96,80 +100,137 @@ npm install
 npm run dev
 ```
 
-
-
+> Runs on `http://localhost:5173`
 
 ---
 
+### 4. ML Services — LSTM + Sentiment
 
-## 🔐 Environment Variables Setup
-> 📁 You can also refer to `.env.example` files in each directory for format.
+Both ML services (LSTM and Sentiment) share a **single unified launcher** inside `ml-model/`.  
+Before running, make sure each service has its own Python virtual environment set up (see [Manual Setup](#manual-venv-setup) below).
 
-Create `.env` files in the following locations and fill in your own keys or tokens.
+#### Quick Start (Recommended)
 
-### 📁 flask-api/.env
+**Linux / macOS**
+```bash
+cd ml-model
+chmod +x start.sh
+./start.sh
+```
 
-```env
-API_KEY=your_alpha_vantage_api_key
-FUNCTION=TIME_SERIES_DAILY
-OUTPUTSIZE=full
-DATATYPE=csv
-START_DATE=2015-01-01
+**Windows**
+```bat
+cd ml-model
+start.bat
+```
 
-MODEL_PATH=multivariate_lstm_model.h5
-SCALER_PATH=scaler.save
-WINDOW_SIZE=60
+The launcher starts both APIs simultaneously:
 
-TWELVE_DATA_API_KEY=your_twelve_data_api_key
-API_URL=https://www.alphavantage.co/query
+| Service | URL |
+|---------|-----|
+| LSTM API | `http://localhost:8080` |
+| Sentiment API | `http://localhost:5001` |
+
+> **Linux/macOS**: Press `Ctrl+C` to stop both services at once.  
+> **Windows**: Close the two terminal windows that open.
+
+---
+
+#### Manual venv Setup
+
+If the virtual environments don't exist yet, create them once before using the launcher.
+
+**LSTM API**
+
+```bash
+# Linux / macOS
+cd ml-model/lstm
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+deactivate
+```
+
+```bat
+:: Windows
+cd ml-model\lstm
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+deactivate
+```
+
+**Sentiment API**
+
+```bash
+# Linux / macOS
+cd ml-model/sentiment
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+deactivate
+```
+
+```bat
+:: Windows
+cd ml-model\sentiment
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+deactivate
+```
+
+> The launcher calls each service's venv Python binary directly (`./venv/bin/python3`) to avoid version conflicts with the system Python.
+
+---
+
+### All Services at a Glance
+
+| Service | URL | Notes |
+|---------|-----|-------|
+| Frontend | `http://localhost:5173` | React dev server |
+| Backend | `http://localhost:8000` | Express + Socket.IO |
+| LSTM API | `http://localhost:8080` | Flask prediction server |
+| Sentiment API | `http://localhost:5001` | FastAPI sentiment server |
+
+> The backend proxies all ML requests — the frontend never calls the ML services directly.
+
+---
+
+## Environment Variables
+
+Each service ships with a `.env.example` file. Copy it to `.env` and fill in your values.
+
+| Service | Example File |
+|---------|-------------|
+| Backend | [`backend/.env.example`](backend/.env.example) |
+| Frontend | [`frontend/.env.example`](frontend/.env.example) |
+| LSTM API | [`ml-model/lstm/.env.example`](ml-model/lstm/.env.example) |
+| Sentiment API | [`ml-model/sentiment/.env.example`](ml-model/sentiment/.env.example) |
+
+```bash
+# Quick copy commands
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+cp ml-model/lstm/.env.example ml-model/lstm/.env
+cp ml-model/sentiment/.env.example ml-model/sentiment/.env
 ```
 
 ---
 
-### 📁 backend/.env
+## Screenshots
 
-```env
-MONGO_URI=your_mongodb_connection_string
-PORT=8000
-JWT_SECRET=your_jwt_secret
-
-FMP_API_KEY=your_fmp_api_key
-FINNHUB_API_KEY=your_finnhub_api_key
-FINNHUB_WEBSOCKET_URL=wss://ws.finnhub.io
-```
+<img width="1021" height="757" alt="Dashboard" src="https://github.com/user-attachments/assets/71743d82-579e-44e4-9008-eb0307089f0d" />
+<img width="1920" height="1050" alt="Watchlist" src="https://github.com/user-attachments/assets/2efab0fc-6dd5-4e04-a673-88957caab327" />
+<img width="1920" height="1644" alt="Stock Prediction" src="https://github.com/user-attachments/assets/d3855a04-659c-487d-a792-4d7b6ca2616b" />
+<img width="1920" height="1972" alt="Financials" src="https://github.com/user-attachments/assets/3f5910f5-4afa-4540-89ff-6b40143e7b0a" />
+<img width="1920" height="912" alt="Alerts" src="https://github.com/user-attachments/assets/2cffa441-9e52-4569-9dbc-3bb6fdf5aeb6" />
+<img width="1920" height="1720" alt="Dashboard Home" src="https://github.com/user-attachments/assets/0f6e4a6a-58be-4a54-980d-634392f17b21" />
+<img width="1920" height="4132" alt="Landing Page" src="https://github.com/user-attachments/assets/0ab9ddf6-9b3f-4172-bc46-9c83b9cf0794" />
 
 ---
 
-### 📁 frontend/.env
+## Author
 
-```env
-REACT_APP_BACKEND_URL=http://localhost:8000
-REACT_APP_FINNHUB_API_KEY=your_finnhub_public_api_key
-```
-
-![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Made with React](https://img.shields.io/badge/Frontend-React-blue)
-![Node.js](https://img.shields.io/badge/Backend-Node.js-green)
-![Python](https://img.shields.io/badge/ML-Model-Flask-yellow)
-
----
-
-## 🙋‍♂️ Author
-
-- GitHub: [@yujanThulung](https://github.com/yujanThulung)
-- LinkedIn: [Yujan Rai](https://www.linkedin.com/in/yujan-rai)
-
- ---
-## 📷 Screenshots
-
-<img width="1021" height="757" alt="Screenshot 2025-07-31 183907" src="https://github.com/user-attachments/assets/71743d82-579e-44e4-9008-eb0307089f0d" />
-<img width="1920" height="1050" alt="screencapture-localhost-5173-dashboard-watch-list-2025-07-31-18_35_33" src="https://github.com/user-attachments/assets/2efab0fc-6dd5-4e04-a673-88957caab327" />
-<img width="1920" height="1644" alt="screencapture-localhost-5173-dashboard-stock-prediction-2025-07-31-18_34_28" src="https://github.com/user-attachments/assets/d3855a04-659c-487d-a792-4d7b6ca2616b" />
-<img width="1920" height="1972" alt="screencapture-localhost-5173-dashboard-financial-2025-07-31-18_35_07" src="https://github.com/user-attachments/assets/3f5910f5-4afa-4540-89ff-6b40143e7b0a" />
-<img width="1920" height="912" alt="screencapture-localhost-5173-dashboard-alert-2025-07-31-18_36_10" src="https://github.com/user-attachments/assets/2cffa441-9e52-4569-9dbc-3bb6fdf5aeb6" />
-<img width="1920" height="1720" alt="screencapture-localhost-5173-dashboard-2025-07-31-18_33_40" src="https://github.com/user-attachments/assets/0f6e4a6a-58be-4a54-980d-634392f17b21" />
-<img width="1920" height="4132" alt="screencapture-localhost-5173-2025-07-27-21_22_46" src="https://github.com/user-attachments/assets/0ab9ddf6-9b3f-4172-bc46-9c83b9cf0794" />
-
-
---- 
-
+[![GitHub](https://img.shields.io/badge/GitHub-yujanThulung-181717?logo=github&logoColor=white)](https://github.com/yujanThulung)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Yujan_Rai-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/yujan-rai)
