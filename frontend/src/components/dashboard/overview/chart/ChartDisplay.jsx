@@ -15,7 +15,9 @@ const ChartDisplay = () => {
   const { start: startDate } = getPreciseDateRange(selectedRange.months);
 
   const chartData = useMemo(() => {
-    return (historicalData || [])
+    if (!historicalData || historicalData.length === 0) return [];
+    
+    return historicalData
       .filter((item) => new Date(item.Date) >= startDate)
       .map((item, idx, arr) => {
         const prev = arr[idx - 1];
@@ -43,7 +45,7 @@ const ChartDisplay = () => {
           change,
         };
       });
-  }, [historicalData, selectedRange]);
+  }, [historicalData, selectedRange, startDate]);
 
   const startValue = chartData[0]?.numericValue;
   const endValue = chartData[chartData.length - 1]?.numericValue;
@@ -66,9 +68,10 @@ const ChartDisplay = () => {
     }
   };
 
-  if (loading) {
+  // Show loader when loading OR when we have no historical data and no error yet
+  if (loading || (!historicalData && !error)) {
     return (
-      <div className="h-[300px] flex items-center justify-center">
+      <div className="h-[300px] flex items-center justify-center bg-white rounded-xl border border-gray-100">
         <Loader text="Loading chart data..." />
       </div>
     );
@@ -76,16 +79,32 @@ const ChartDisplay = () => {
 
   if (error) {
     return (
-      <div className="h-[300px] flex items-center justify-center text-red-500">
-        Error loading data for {ticker}: {error}
+      <div className="h-[300px] flex items-center justify-center text-red-500 bg-white rounded-xl border border-gray-100">
+        <div className="text-center px-4">
+          <p className="font-semibold">Error loading chart</p>
+          <p className="text-sm text-gray-500 mt-1">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!ticker) {
+    return (
+      <div className="h-[300px] flex items-center justify-center text-gray-400 bg-white rounded-xl border border-gray-100">
+        <div className="text-center">
+          <p className="text-sm">Select a ticker to view chart</p>
+        </div>
       </div>
     );
   }
 
   if (chartData.length === 0) {
     return (
-      <div className="h-[300px] flex items-center justify-center text-gray-400">
-        No chart data available for {ticker}.
+      <div className="h-[300px] flex items-center justify-center text-gray-400 bg-white rounded-xl border border-gray-100">
+        <div className="text-center">
+          <p className="text-sm">No chart data available for {ticker}</p>
+          <p className="text-xs text-gray-400 mt-1">Try selecting a different time range</p>
+        </div>
       </div>
     );
   }

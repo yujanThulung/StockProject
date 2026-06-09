@@ -36,9 +36,16 @@ const usePricePredictionStore = create(
 
       fetchHistoricalData: async (ticker) => {
         const { fetchedTickers } = get();
-        if (fetchedTickers.has(ticker)) return;
-
+        
+        // Show loading state even for cached tickers
         set({ loading: true, error: null });
+        
+        // If already cached, just set loading back to false after a brief moment
+        if (fetchedTickers.has(ticker)) {
+          setTimeout(() => set({ loading: false }), 100);
+          return;
+        }
+
         try {
           const response = await mlApi.post('/historical', { ticker });
           if (response.data.status !== 'success')
