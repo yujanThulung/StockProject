@@ -46,7 +46,7 @@ const StockChart = () => {
     }, [historicalData, selectedRange]);
 
     // Set chart data when transformed
-    React.useEffect(() => {
+    useEffect(() => {
         if (transformedData.length > 0) {
             setChartData(transformedData);
         }
